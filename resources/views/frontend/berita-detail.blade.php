@@ -68,7 +68,7 @@
     @endif
 
     {{-- Content --}}
-    <div class="prose prose-lg max-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-blue-600 prose-img:rounded-lg">
+    <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-blue-600 prose-img:rounded-lg mb-8 rounded-xl">
         {!! preg_replace('/<iframe([^>]*?)\s+sandbox=""\s*/i', '<iframe$1 ', $news->content) !!}
     </div>
 

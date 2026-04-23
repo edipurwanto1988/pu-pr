@@ -17,7 +17,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1"><i class="ri-phone-line"></i> 0813-7280-1534</span>
-                <span class="flex items-center gap-1"><i class="ri-mail-line"></i> official@pu-pr.com</span>
+                <span class="flex items-center gap-1"><i class="ri-mail-line"></i> info@pu-pr.com</span>
             </div>
             <div class="flex items-center gap-3">
                 <a href="#" class="hover:text-white transition-colors"><i class="ri-facebook-line text-sm"></i></a>

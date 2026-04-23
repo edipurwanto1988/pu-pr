@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\KataTokohController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:super-admin|admin|umkm-ikm'])->prefix('admin')->name('admin.')->group(function () {
@@ -28,6 +29,8 @@ Route::middleware(['auth', 'role:super-admin|admin|umkm-ikm'])->prefix('admin')-
         Route::resource('/sliders', SliderController::class);
         Route::resource('/partners', PartnerController::class);
         Route::resource('/sponsors', \App\Http\Controllers\Admin\SponsorController::class);
+        Route::resource('/kata-tokoh', KataTokohController::class);
+        Route::post('/kata-tokoh/{kataTokoh}/toggle', [\App\Http\Controllers\Admin\KataTokohController::class, 'toggle'])->name('kata-tokoh.toggle');
         Route::resource('/news', \App\Http\Controllers\Admin\NewsController::class);
         Route::post('/news/{news}/publish', [\App\Http\Controllers\Admin\NewsController::class, 'publish'])->name('news.publish');
         Route::resource('/pages', \App\Http\Controllers\Admin\PageController::class);

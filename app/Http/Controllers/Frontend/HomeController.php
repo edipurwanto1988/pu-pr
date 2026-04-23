@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Slider;
 use App\Models\Sponsor;
 use App\Models\Setting;
+use App\Models\KataTokoh;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -16,6 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         $sliders = Slider::where('status', 'active')->orderBy('order')->get();
+        $kataTokoh = KataTokoh::where('status', 'active')->orderBy('order')->get();
         $produkUnggulan = Product::where('is_featured', true)
             ->where('type', 'produk')
             ->where('status', 'approved')
@@ -29,7 +31,7 @@ class HomeController extends Controller
         $partners = Partner::where('status', 'active')->orderBy('order')->get();
         $sponsors = Sponsor::where('status', 'active')->orderBy('order')->get();
 
-        return view('frontend.home', compact('sliders', 'produkUnggulan', 'beritaTerbaru', 'partners', 'sponsors'));
+        return view('frontend.home', compact('sliders', 'kataTokoh', 'produkUnggulan', 'beritaTerbaru', 'partners', 'sponsors'));
     }
 
     public function produk(Request $request)

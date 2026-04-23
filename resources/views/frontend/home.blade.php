@@ -198,6 +198,63 @@
     </div>
 </section>
 
+{{-- Kata Tokoh --}}
+@if($kataTokoh->count() > 0)
+<section class="relative overflow-hidden py-14 md:py-20" style="background: linear-gradient(to bottom right, #ca4e33, #b8432b, #a03a24);">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-80 h-80 bg-white/20 rounded-full"></div>
+        <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-white/20 rounded-full"></div>
+        <div class="absolute top-10 left-10 w-40 h-40 bg-white/10 rounded-full"></div>
+        <div class="absolute bottom-1/3 right-20 w-24 h-24 bg-white/10 rounded-full"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div class="text-center mb-10 md:mb-12">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 text-white rounded-full text-sm font-medium mb-3">
+                <i class="ri-double-quotes-l"></i> Kata Tokoh
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Apa Kata Mereka?</h2>
+            <p class="text-white/80 max-w-lg mx-auto">Testimoni dan dukungan dari para pemangku kepentingan</p>
+        </div>
+
+        <div id="kata-tokoh-carousel" class="relative">
+            <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
+                <div class="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full"></div>
+                <div class="absolute -bottom-8 -left-8 w-16 h-16 bg-white/10 rounded-full"></div>
+                <div class="absolute top-1/2 right-4 w-12 h-12 bg-white/5 rounded-full"></div>
+            </div>
+            <div class="overflow-hidden">
+                <div class="flex transition-transform duration-500 ease-in-out" id="kata-tokoh-track">
+                    @foreach($kataTokoh as $index => $tokoh)
+                    <div class="flex-shrink-0 w-full px-4">
+                        <div class="bg-gray-900/80 backdrop-blur rounded-2xl shadow-lg border border-white/20 p-8 md:p-10 text-center max-w-2xl mx-auto">
+                            <img src="{{ asset('storage/' . $tokoh->foto) }}" alt="{{ $tokoh->nama }}" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-white/30">
+                            <p class="text-white text-lg leading-relaxed mb-4">{{ $tokoh->deskripsi }}</p>
+                            <p class="font-bold text-white text-lg">{{ $tokoh->nama }}</p>
+                            <p class="text-white/80 font-medium">{{ $tokoh->jabatan }}</p>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            @if($kataTokoh->count() > 1)
+            <button onclick="prevTokoh()" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 w-12 h-12 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-[#ca4e33] hover:bg-white hover:shadow-xl transition-all z-10">
+                <i class="ri-arrow-left-s-line text-2xl"></i>
+            </button>
+            <button onclick="nextTokoh()" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 w-12 h-12 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-[#ca4e33] hover:bg-white hover:shadow-xl transition-all z-10">
+                <i class="ri-arrow-right-s-line text-2xl"></i>
+            </button>
+            <div class="flex justify-center gap-2 mt-6" id="kata-tokoh-dots">
+                @foreach($kataTokoh as $index => $tokoh)
+                <button onclick="goToTokoh({{ $index }})" class="kata-tokoh-dot w-2.5 h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-white w-8' : 'bg-white/50' }}" data-index="{{ $index }}"></button>
+                @endforeach
+            </div>
+            @endif
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- Berita Terbaru --}}
 @if($beritaTerbaru->count() > 0)
 <section class="py-14 md:py-20 bg-gray-50">
@@ -299,6 +356,51 @@
 </section>
 @endif
 
+{{-- Kata Tokoh Carousel Script --}}
+@if($kataTokoh->count() > 0)
+<script>
+    let currentTokoh = 0;
+    const totalTokoh = {{ $kataTokoh->count() }};
+    let tokohInterval;
+
+    function goToTokoh(index) {
+        const track = document.getElementById('kata-tokoh-track');
+        const dots = document.querySelectorAll('.kata-tokoh-dot');
+        
+        track.style.transform = `translateX(-${index * 100}%)`;
+        
+        dots.forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.add('bg-[#ca4e33]', 'w-8');
+                dot.classList.remove('bg-gray-300', 'w-2.5');
+            } else {
+                dot.classList.remove('bg-[#ca4e33]', 'w-8');
+                dot.classList.add('bg-gray-300', 'w-2.5');
+            }
+        });
+        
+        currentTokoh = index;
+    }
+
+    function nextTokoh() {
+        goToTokoh((currentTokoh + 1) % totalTokoh);
+        resetTokohInterval();
+    }
+
+    function prevTokoh() {
+        goToTokoh((currentTokoh - 1 + totalTokoh) % totalTokoh);
+        resetTokohInterval();
+    }
+
+    function resetTokohInterval() {
+        clearInterval(tokohInterval);
+        tokohInterval = setInterval(nextTokoh, 5000);
+    }
+
+    tokohInterval = setInterval(nextTokoh, 5000);
+</script>
+@endif
+
 {{-- Slider Script --}}
 @if($sliders->count() > 1)
 <script>
@@ -348,6 +450,17 @@
     // Auto-play
     sliderInterval = setInterval(nextSlide, 5000);
 </script>
+@endif
+
+@php
+    $waNumber = \App\Models\Setting::where('name', 'whatsapp_number')->value('value');
+    $waMessage = \App\Models\Setting::where('name', 'whatsapp_message')->value('value');
+@endphp
+
+@if($waNumber)
+<a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $waNumber) }}{{ $waMessage ? '?text=' . urlencode($waMessage) : '' }}" target="_blank" rel="noopener noreferrer" style="position:fixed;bottom:2rem;right:1.5rem;z-index:50;background-color:#22c55e;color:white;width:56px;height:56px;border-radius:50%;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;transition:all .3s;" onmouseover="this.style.backgroundColor='#16a34a';this.style.transform='scale(1.1)'" onmouseout="this.style.backgroundColor='#22c55e';this.style.transform='scale(1)'">
+    <i class="ri-whatsapp-line" style="font-size:1.75rem;"></i>
+</a>
 @endif
 
 @endsection

@@ -39,7 +39,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1"><i class="ri-phone-line"></i> 0813-7280-1534</span>
-                <span class="flex items-center gap-1"><i class="ri-mail-line"></i> official@pu-pr.com</span>
+                <span class="flex items-center gap-1"><i class="ri-mail-line"></i> info@pu-pr.com</span>
             </div>
             <div class="flex items-center gap-3">
                 <a href="#" class="hover:text-white transition-colors"><i class="ri-facebook-line text-sm"></i></a>
@@ -56,8 +56,8 @@
                 {{-- Logo --}}
                 <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0">
                     <img src="{{ asset('logo_pupr.webp') }}" alt="{{ config('app.name') }}" class="h-9 w-9 object-contain">
+                    <span class="text-lg font-bold text-gray-800 leading-tight block">PUPR</span>
                     <div class="hidden sm:block">
-                        <span class="text-lg font-bold text-gray-800 leading-tight block">PUPR</span>
                         <span class="text-[10px] text-gray-400 leading-tight block -mt-0.5">Pekanbaru</span>
                     </div>
                 </a>
@@ -201,7 +201,7 @@
                         </li>
                         <li class="flex items-center gap-2.5 text-sm text-gray-400">
                             <i class="ri-mail-line text-base shrink-0"></i>
-                            <span>official@pu-pr.com</span>
+                            <span>info@pu-pr.com</span>
                         </li>
                     </ul>
                 </div>
@@ -259,16 +259,7 @@
     });
     </script>
 
-    @php
-        $waNumber = \App\Models\Setting::where('name', 'whatsapp_number')->value('value');
-        $waMessage = \App\Models\Setting::where('name', 'whatsapp_message')->value('value');
-    @endphp
-
-    @if($waNumber)
-    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $waNumber) }}{{ $waMessage ? '?text=' . urlencode($waMessage) : '' }}" target="_blank" rel="noopener noreferrer" style="position:fixed;bottom:2rem;right:1.5rem;z-index:50;background-color:#22c55e;color:white;width:56px;height:56px;border-radius:50%;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;transition:all .3s;" onmouseover="this.style.backgroundColor='#16a34a';this.style.transform='scale(1.1)'" onmouseout="this.style.backgroundColor='#22c55e';this.style.transform='scale(1)'">
-        <i class="ri-whatsapp-line" style="font-size:1.75rem;"></i>
-    </a>
-    @endif
+    
 
     <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:2rem;right:6rem;z-index:50;background-color:#ca4e33;color:white;width:3rem;height:3rem;border-radius:9999px;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;transition:all .3s;opacity:0;visibility:hidden;" onmouseover="this.style.backgroundColor='#b8432b'" onmouseout="this.style.backgroundColor='#ca4e33'">
         <i class="ri-arrow-up-line" style="font-size:1.25rem;"></i>

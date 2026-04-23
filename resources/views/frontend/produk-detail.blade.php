@@ -39,7 +39,7 @@
     </div>
 
     {{-- Product Main Section --}}
-    <section class="py-8 md:py-12">
+    <section class="py-2 md:py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-8 lg:gap-16">
                 
@@ -382,4 +382,3 @@ function shareProduct() {
 }
 </script>
 @endsection
-tion

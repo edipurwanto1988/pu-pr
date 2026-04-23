@@ -67,7 +67,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'umkm_profile_id' => 'required|exists:umkm_profiles,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:400',
         ]);
 
         $data = $request->except('image', 'images');
@@ -112,7 +112,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'umkm_profile_id' => 'required|exists:umkm_profiles,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:400',
         ]);
 
         $data = $request->except('image', 'images');

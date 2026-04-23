@@ -48,7 +48,7 @@
                     <i class="ri-settings-3-line mr-2"></i> Pengaturan
                 </a>
 
-                @php $masterRoutes = ['admin.categories.*', 'admin.menus.*', 'admin.sliders.*', 'admin.galleries.*', 'admin.partners.*', 'admin.sponsors.*', 'admin.users.*', 'admin.kecamatans.*', 'admin.kelurahans.*']; @endphp
+                @php $masterRoutes = ['admin.categories.*', 'admin.menus.*', 'admin.sliders.*', 'admin.galleries.*', 'admin.partners.*', 'admin.sponsors.*', 'admin.users.*', 'admin.kecamatans.*', 'admin.kelurahans.*', 'admin.kata-tokoh.*']; @endphp
                 @php $isMasterActive = collect($masterRoutes)->contains(fn($r) => request()->routeIs($r)); @endphp
                 <div>
                     <button type="button" onclick="toggleMaster()" class="w-full flex items-center justify-between px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ $isMasterActive ? 'bg-gray-100' : '' }}">
@@ -79,6 +79,9 @@
                         </a>
                         <a href="{{ route('admin.kelurahans.index') }}" class="block px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm {{ request()->routeIs('admin.kelurahans.*') ? 'bg-gray-100 text-gray-900' : '' }}">
                             <i class="ri-home-line mr-2"></i> Kelurahan
+                        </a>
+                        <a href="{{ route('admin.kata-tokoh.index') }}" class="block px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm {{ request()->routeIs('admin.kata-tokoh.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                            <i class="ri-double-quotes-l mr-2"></i> Kata Tokoh
                         </a>
                     </div>
                 </div>
