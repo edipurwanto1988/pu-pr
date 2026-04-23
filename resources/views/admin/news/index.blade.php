@@ -1,0 +1,87 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="mb-6 flex justify-between items-center">
+    <h1 class="text-2xl font-semibold text-gray-800"><i class="ri-news-line mr-2"></i>Berita</h1>
+    <a href="{{ route('admin.news.create') }}" class="px-4 py-2 bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b]">
+        <i class="ri-add-line mr-1"></i> Tambah Berita
+    </a>
+</div>
+
+@if(session('success'))
+    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg"><i class="ri-check-line mr-1"></i>{{ session('success') }}</div>
+@endif
+
+<form method="GET" action="{{ route('admin.news.index') }}" class="mb-4 bg-white rounded-lg shadow p-4">
+    <div class="flex flex-wrap gap-2 items-end">
+        <div class="flex flex-col">
+            <label class="block text-xs font-medium text-gray-500 mb-1">Cari</label>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Judul berita..." class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-9 w-56 text-sm">
+        </div>
+        <div class="flex flex-col">
+            <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
+            <select name="status" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-9 text-sm">
+                <option value="">Semua</option>
+                <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published</option>
+            </select>
+        </div>
+        <div class="flex flex-col">
+            <label class="block text-xs font-medium text-gray-500 mb-1">&nbsp;</label>
+            <div class="flex gap-2">
+                <button type="submit" class="px-3 bg-[#ca4e33] text-white rounded-md hover:bg-[#b8432b] h-9 text-sm"><i class="ri-search-line mr-1"></i>Filter</button>
+                <a href="{{ route('admin.news.index') }}" class="px-3 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 h-9 text-sm inline-flex items-center"><i class="ri-refresh-line mr-1"></i>Reset</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Penulis</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @forelse($news as $item)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-800">{{ $item->title }}</td>
+                    <td class="px-6 py-4">
+                        @if($item->status === 'draft')
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700"><i class="ri-draft-line mr-1"></i>Draft</span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700"><i class="ri-checkbox-circle-line mr-1"></i>Published</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-gray-500">{{ $item->creator?->name }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ $item->created_at->format('d M Y') }}</td>
+                    <td class="px-6 py-4 text-right whitespace-nowrap">
+                        <a href="{{ route('admin.news.edit', $item) }}" class="text-yellow-600 hover:text-yellow-900 mr-2" title="Edit"><i class="ri-edit-line"></i></a>
+                        @if($item->status === 'draft')
+                            <form action="{{ route('admin.news.publish', $item) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="text-emerald-600 hover:text-emerald-900 mr-2" title="Publish"><i class="ri-send-plane-line"></i></button>
+                            </form>
+                        @endif
+                        <form action="{{ route('admin.news.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus"><i class="ri-delete-bin-line"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="5" class="px-6 py-8 text-center text-gray-500"><i class="ri-inbox-line text-3xl block mb-2"></i>Belum ada berita</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-4">
+    {{ $news->withQueryString()->links() }}
+</div>
+@endsection
