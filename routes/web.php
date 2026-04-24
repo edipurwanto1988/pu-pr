@@ -5,6 +5,16 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+
+Route::get('/test-db', function () {
+    try {
+        DB::connection()->getPdo();
+        return "✅ Laravel konek DB";
+    } catch (\Exception $e) {
+        return "❌ " . $e->getMessage();
+    }
+});
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
