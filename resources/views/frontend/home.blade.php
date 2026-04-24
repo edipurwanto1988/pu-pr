@@ -18,7 +18,7 @@
   "logo": "{{ asset('logo_pupr.webp') }}",
   "description": "Platform Promosi UMKM/IKM Kota Pekanbaru",
   "address": { "@@type": "PostalAddress", "addressLocality": "Pekanbaru", "addressRegion": "Riau", "addressCountry": "ID" },
-  "contactPoint": { "@@type": "ContactPoint", "telephone": "+62-813-7280-1534", "contactType": "customer service" }
+  "contactPoint": { "@@type": "ContactPoint", "telephone": "+62-813-6569-5586", "contactType": "customer service" }
 }
 </script>
 @endsection
@@ -27,21 +27,21 @@
 
 {{-- Hero / Slider Section --}}
 @if($sliders->count() > 0)
-<section class="relative h-[400px] md:h-[500px] overflow-hidden">
+<section class="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
     <div id="hero-slider" class="relative w-full h-full">
         @foreach($sliders as $index => $slider)
         <div class="slider-slide absolute inset-0 transition-opacity duration-700 {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
             <img src="{{ asset('storage/' . $slider->image) }}" alt="{{ $slider->title }}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-gray-900/70 via-gray-900/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-gray-900/70 via-gray-900/40 to-transparent md:from-gray-900/80 md:via-gray-900/60"></div>
             <div class="absolute inset-0 flex items-center">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div class="max-w-xl">
-                        <h1 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-3">{{ $slider->title }}</h1>
+                <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 w-full">
+                    <div class="max-w-xs sm:max-w-md md:max-w-xl lg:max-w-2xl">
+                        <h1 class="text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold text-white leading-tight mb-2 md:mb-3">{{ $slider->title }}</h1>
                         @if($slider->subtitle)
-                            <p class="text-base md:text-lg text-gray-200 mb-6 leading-relaxed">{{ $slider->subtitle }}</p>
+                            <p class="text-xs sm:text-sm md:text-base text-gray-200 mb-3 md:mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">{{ $slider->subtitle }}</p>
                         @endif
                         @if($slider->button_text && $slider->link)
-                            <a href="{{ $slider->link }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                            <a href="{{ $slider->link }}" class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 text-xs sm:text-sm md:text-base bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                                 {{ $slider->button_text }} <i class="ri-arrow-right-line"></i>
                             </a>
                         @endif
@@ -54,16 +54,16 @@
 
     {{-- Slider Controls --}}
     @if($sliders->count() > 1)
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+    <div class="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2">
         @foreach($sliders as $index => $slider)
-        <button onclick="goToSlide({{ $index }})" class="slider-dot w-2.5 h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-white w-8' : 'bg-white/50' }}" data-index="{{ $index }}"></button>
+        <button onclick="goToSlide({{ $index }})" class="slider-dot w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-white w-6 sm:w-8' : 'bg-white/50' }}" data-index="{{ $index }}"></button>
         @endforeach
     </div>
-    <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors">
-        <i class="ri-arrow-left-s-line text-xl"></i>
+    <button onclick="prevSlide()" class="absolute left-2 sm:left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 md:w-10 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors">
+        <i class="ri-arrow-left-s-line text-lg sm:text-xl"></i>
     </button>
-    <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors">
-        <i class="ri-arrow-right-s-line text-xl"></i>
+    <button onclick="nextSlide()" class="absolute right-2 sm:right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 md:w-10 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-colors">
+        <i class="ri-arrow-right-s-line text-lg sm:text-xl"></i>
     </button>
     @endif
 </section>

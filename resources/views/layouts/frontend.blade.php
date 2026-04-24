@@ -38,7 +38,7 @@
     <div class="bg-[#ca4e33] text-white/80 text-xs py-1.5 hidden md:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <span class="flex items-center gap-1"><i class="ri-phone-line"></i> 0813-7280-1534</span>
+                <span class="flex items-center gap-1"><i class="ri-phone-line"></i> 0813-6569-5586</span>
                 <span class="flex items-center gap-1"><i class="ri-mail-line"></i> info@pu-pr.com</span>
             </div>
             <div class="flex items-center gap-3">
@@ -197,7 +197,7 @@
                         </li>
                         <li class="flex items-center gap-2.5 text-sm text-gray-400">
                             <i class="ri-phone-line text-base shrink-0"></i>
-                            <span>0813-7280-1534</span>
+                            <span>0813-6569-5586</span>
                         </li>
                         <li class="flex items-center gap-2.5 text-sm text-gray-400">
                             <i class="ri-mail-line text-base shrink-0"></i>
