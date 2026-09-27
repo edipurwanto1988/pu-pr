@@ -52,7 +52,7 @@
                         <div id="existing-images" class="flex flex-wrap gap-3 mb-3">
                             @foreach($product->images as $img)
                                 <div class="relative group" data-id="{{ $img->id }}">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}" alt="" class="w-24 h-24 object-cover rounded-lg border">
+                                    <img src="{{ $img->image_url }}" alt="" class="w-24 h-24 object-cover rounded-lg border">
                                     <button type="button" onclick="deleteImage(this, {{ $img->id }})" class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 opacity-0 group-hover:opacity-100 transition"><i class="ri-close-line text-xs"></i></button>
                                     @if($loop->first)<span class="absolute bottom-1 left-1 bg-[#ca4e33] text-white text-[10px] px-1.5 py-0.5 rounded">Utama</span>@endif
                                 </div>

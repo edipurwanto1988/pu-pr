@@ -79,7 +79,14 @@ class ProductController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('products', 'public');
+                $driveId = $this->uploadToGoogleDrive($image);
+                
+                if ($driveId) {
+                    $path = 'gdrive:' . $driveId;
+                } else {
+                    $path = $image->store('products', 'public');
+                }
+
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => $path,
@@ -124,7 +131,14 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             $lastOrder = $product->images()->max('order') ?? 0;
             foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('products', 'public');
+                $driveId = $this->uploadToGoogleDrive($image);
+                
+                if ($driveId) {
+                    $path = 'gdrive:' . $driveId;
+                } else {
+                    $path = $image->store('products', 'public');
+                }
+
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => $path,
@@ -174,9 +188,54 @@ class ProductController extends Controller
     public function deleteImage(Product $product, $imageId)
     {
         $image = ProductImage::where('product_id', $product->id)->where('id', $imageId)->firstOrFail();
-        Storage::disk('public')->delete($image->image_path);
+        if (\Str::startsWith($image->image_path, 'gdrive:')) {
+            // Option to delete from Google Drive could be added here
+        } else {
+            Storage::disk('public')->delete($image->image_path);
+        }
         $image->delete();
 
         return response()->json(['success' => true]);
+    }
+
+    private function uploadToGoogleDrive($file)
+    {
+        $clientId = \App\Models\Setting::where('name', 'google_drive_client_id')->value('value');
+        $clientSecret = \App\Models\Setting::where('name', 'google_drive_client_secret')->value('value');
+        $refreshToken = \App\Models\Setting::where('name', 'google_drive_refresh_token')->value('value');
+        $folderId = \App\Models\Setting::where('name', 'google_drive_folder_id')->value('value');
+
+        if (empty($clientId) || empty($clientSecret) || empty($refreshToken) || empty($folderId)) {
+            return false;
+        }
+
+        $tokenResponse = \Illuminate\Support\Facades\Http::asForm()->post('https://oauth2.googleapis.com/token', [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'refresh_token' => $refreshToken,
+            'grant_type' => 'refresh_token',
+        ]);
+
+        if (!$tokenResponse->successful()) {
+            return false;
+        }
+
+        $accessToken = $tokenResponse->json('access_token');
+        
+        $metadata = json_encode([
+            'name' => 'Produk_' . time() . '_' . $file->getClientOriginalName(),
+            'parents' => [$folderId]
+        ]);
+
+        $uploadResponse = \Illuminate\Support\Facades\Http::withToken($accessToken)
+            ->attach('metadata', $metadata, 'metadata.json', ['Content-Type' => 'application/json'])
+            ->attach('file', file_get_contents($file->path()), $file->getClientOriginalName(), ['Content-Type' => $file->getMimeType()])
+            ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+        if ($uploadResponse->successful()) {
+            return $uploadResponse->json('id');
+        }
+
+        return false;
     }
 }

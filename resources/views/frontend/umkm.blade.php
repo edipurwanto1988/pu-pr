@@ -38,7 +38,7 @@
                         <a href="{{ route($product->type === 'produk' ? 'produk.detail' : 'jasa.detail', $product->slug) }}" class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                             <div class="aspect-square bg-gray-100 overflow-hidden">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    <img src="{{ $product->images->first()->image_url }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-300"><i class="ri-image-line text-3xl"></i></div>
                                 @endif

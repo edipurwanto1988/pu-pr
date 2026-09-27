@@ -13,4 +13,14 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function getImageUrlAttribute()
+    {
+        if (\Str::startsWith($this->image_path, 'gdrive:')) {
+            $driveId = str_replace('gdrive:', '', $this->image_path);
+            return "https://drive.google.com/uc?export=view&id={$driveId}";
+        }
+        
+        return asset('storage/' . $this->image_path);
+    }
 }

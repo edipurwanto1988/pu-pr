@@ -4,7 +4,7 @@
 
 @section('og_title', $product->name . ' — ' . ($product->umkmProfile?->business_name ?? 'PUPR'))
 @section('og_description', \Illuminate\Support\Str::limit(strip_tags($product->description ?? ''), 160))
-@section('og_image', $product->images->count() > 0 ? asset('storage/' . $product->images->first()->image_path) : asset('logo_pupr.webp'))
+@section('og_image', $product->images->count() > 0 ? $product->images->first()->image_url : asset('logo_pupr.webp'))
 @section('og_url', route('jasa.detail', $product->slug))
 
 @section('json_ld')
@@ -14,7 +14,7 @@
   "@@type": "Service",
   "name": {{ json_encode($product->name) }},
   "description": {{ json_encode(\Illuminate\Support\Str::limit(strip_tags($product->description ?? ''), 300)) }},
-  "image": {{ json_encode($product->images->count() > 0 ? asset('storage/' . $product->images->first()->image_path) : asset('logo_pupr.webp')) }},
+  "image": {{ json_encode($product->images->count() > 0 ? $product->images->first()->image_url : asset('logo_pupr.webp')) }},
   "provider": { "@@type": "Organization", "name": {{ json_encode($product->umkmProfile?->business_name ?? 'PUPR') }} }
 }
 </script>
@@ -48,7 +48,7 @@
                         <div class="relative group">
                             <div class="aspect-square md:aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden shadow-sm border border-gray-100" id="mainImageWrap">
                                 @if($product->images->count() > 0)
-                                    <img id="mainImage" src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <img id="mainImage" src="{{ $product->images->first()->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 @else
                                     <div class="w-full h-full flex flex-col items-center justify-center text-gray-300 bg-gray-50">
                                         <i class="ri-image-2-line text-7xl mb-2"></i>
@@ -70,9 +70,9 @@
                         @if($product->images->count() > 1)
                             <div class="mt-4 flex gap-3 overflow-x-auto pb-2 scrollbar-hide" id="thumbnailRow">
                                 @foreach($product->images as $i => $img)
-                                    <button onclick="switchImage('{{ asset('storage/' . $img->image_path) }}', this)" 
+                                    <button onclick="switchImage('{{ $img->image_url }}', this)" 
                                         class="shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 transition-all duration-300 relative @if($i === 0) border-[#ca4e33] ring-2 ring-[#ca4e33]/20 @else border-gray-100 hover:border-gray-300 @endif">
-                                        <img src="{{ asset('storage/' . $img->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover">
+                                        <img src="{{ $img->image_url }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover">
                                         @if($i === 0)
                                             <div class="absolute inset-0 bg-[#ca4e33]/5"></div>
                                         @endif
@@ -283,7 +283,7 @@
                         <a href="{{ route('jasa.detail', $item->slug) }}" class="block">
                             <div class="aspect-square bg-gray-50 overflow-hidden relative">
                                 @if($item->images->first())
-                                    <img src="{{ asset('storage/' . $item->images->first()->image_path) }}" alt="{{ $item->name }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    <img src="{{ $item->images->first()->image_url }}" alt="{{ $item->name }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-200">
                                         <i class="ri-service-line text-5xl"></i>

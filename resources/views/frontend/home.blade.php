@@ -152,7 +152,7 @@
                     <a href="{{ route('produk.detail', $produk->slug) }}" class="group block bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300">
                         <div class="aspect-square bg-gray-50 overflow-hidden relative">
                             @if($produk->images->first())
-                                <img src="{{ asset('storage/' . $produk->images->first()->image_path) }}" alt="{{ $produk->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                                <img src="{{ $produk->images->first()->image_url }}" alt="{{ $produk->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
                                     <i class="ri-image-line text-4xl"></i>
