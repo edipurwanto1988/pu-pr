@@ -119,7 +119,7 @@ class UmkmController extends Controller
             $user = User::find($request->user_id);
         }
 
-        UmkmProfile::create([
+        $umkmData = [
             'user_id' => $user->id,
             'business_name' => $request->business_name,
             'business_type' => $request->business_type,
@@ -135,7 +135,27 @@ class UmkmController extends Controller
             'status' => $request->status,
             'validated_by' => $request->status === 'approved' ? auth()->id() : null,
             'validated_at' => $request->status === 'approved' ? now() : null,
-        ]);
+        ];
+
+        if ($request->hasFile('logo')) {
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('logo'), 'Logo_');
+            if ($driveId) {
+                $umkmData['logo'] = 'gdrive:' . $driveId;
+            } else {
+                $umkmData['logo'] = $request->file('logo')->store('umkm', 'public');
+            }
+        }
+
+        if ($request->hasFile('banner')) {
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('banner'), 'Banner_');
+            if ($driveId) {
+                $umkmData['banner'] = 'gdrive:' . $driveId;
+            } else {
+                $umkmData['banner'] = $request->file('banner')->store('umkm', 'public');
+            }
+        }
+
+        UmkmProfile::create($umkmData);
 
         return redirect()->route('admin.umkm.index')->with('success', 'UMKM/IKM berhasil dibuat');
     }
@@ -160,11 +180,31 @@ class UmkmController extends Controller
             'type' => 'required|in:umkm,ikm',
             'kecamatan_id' => 'nullable|exists:kecamatans,id',
             'kelurahan_id' => 'nullable|exists:kelurahans,id',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $data = $request->only(['business_name', 'business_type', 'type', 'description', 'address', 'kecamatan_id', 'kelurahan_id', 'postal_code', 'phone', 'whatsapp']);
         $data['slug'] = \Str::slug($request->business_name);
         $data['description'] = $this->cleanTinyMce($data['description'] ?? null);
+
+        if ($request->hasFile('logo')) {
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('logo'), 'Logo_');
+            if ($driveId) {
+                $data['logo'] = 'gdrive:' . $driveId;
+            } else {
+                $data['logo'] = $request->file('logo')->store('umkm', 'public');
+            }
+        }
+
+        if ($request->hasFile('banner')) {
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('banner'), 'Banner_');
+            if ($driveId) {
+                $data['banner'] = 'gdrive:' . $driveId;
+            } else {
+                $data['banner'] = $request->file('banner')->store('umkm', 'public');
+            }
+        }
 
         $umkm->update($data);
 
