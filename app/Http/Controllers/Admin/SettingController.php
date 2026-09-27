@@ -101,4 +101,53 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.index')->with('error', 'Gagal terhubung ke Google Drive API: ' . $response->body());
     }
+
+    public function testUploadGoogleDrive(Request $request)
+    {
+        $request->validate([
+            'test_file' => 'required|file|max:5120', // Max 5MB
+        ]);
+
+        $clientId = Setting::where('name', 'google_drive_client_id')->value('value');
+        $clientSecret = Setting::where('name', 'google_drive_client_secret')->value('value');
+        $refreshToken = Setting::where('name', 'google_drive_refresh_token')->value('value');
+        $folderId = Setting::where('name', 'google_drive_folder_id')->value('value');
+
+        if (empty($clientId) || empty($clientSecret) || empty($refreshToken) || empty($folderId)) {
+            return redirect()->route('admin.settings.index')->with('error', 'Konfigurasi Google Drive belum lengkap (Pastikan Folder ID juga sudah diisi).');
+        }
+
+        // Dapatkan Access Token baru menggunakan Refresh Token
+        $tokenResponse = \Illuminate\Support\Facades\Http::asForm()->post('https://oauth2.googleapis.com/token', [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'refresh_token' => $refreshToken,
+            'grant_type' => 'refresh_token',
+        ]);
+
+        if (!$tokenResponse->successful()) {
+            return redirect()->route('admin.settings.index')->with('error', 'Gagal mendapatkan Access Token: ' . $tokenResponse->body());
+        }
+
+        $accessToken = $tokenResponse->json('access_token');
+        $file = $request->file('test_file');
+
+        // Upload ke Google Drive via Multipart
+        $metadata = json_encode([
+            'name' => 'TEST_' . $file->getClientOriginalName(),
+            'parents' => [$folderId]
+        ]);
+
+        $uploadResponse = \Illuminate\Support\Facades\Http::withToken($accessToken)
+            ->attach('metadata', $metadata, 'metadata.json', ['Content-Type' => 'application/json'])
+            ->attach('file', file_get_contents($file->path()), $file->getClientOriginalName(), ['Content-Type' => $file->getMimeType()])
+            ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+        if ($uploadResponse->successful()) {
+            $fileId = $uploadResponse->json('id');
+            return redirect()->route('admin.settings.index')->with('success', 'File berhasil diupload ke Google Drive! ID File: ' . $fileId);
+        }
+
+        return redirect()->route('admin.settings.index')->with('error', 'Gagal mengupload file: ' . $uploadResponse->body());
+    }
 }

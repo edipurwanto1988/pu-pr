@@ -114,6 +114,28 @@
             </div>
         </form>
     </div>
+
+    @if(isset($grouped['google_drive']))
+        @php
+            $hasToken = $grouped['google_drive']->firstWhere('name', 'google_drive_refresh_token')->value;
+        @endphp
+        @if($hasToken)
+        <div id="test-upload-section" class="mt-6 bg-white rounded-lg shadow p-6 hidden">
+            <h2 class="text-lg font-medium text-gray-800 mb-4"><i class="ri-upload-cloud-2-line mr-2"></i>Test Upload ke Google Drive</h2>
+            <p class="text-sm text-gray-600 mb-4">Karena Anda sudah terhubung ke Google Drive, Anda bisa mencoba fitur upload untuk memastikan konfigurasi berjalan dengan baik.</p>
+            <form action="{{ route('admin.settings.google-drive.test-upload') }}" method="POST" enctype="multipart/form-data" class="flex gap-4 items-end">
+                @csrf
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pilih File (Gambar/Dokumen, Maks. 5MB)</label>
+                    <input type="file" name="test_file" required class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border rounded-md">
+                </div>
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium whitespace-nowrap h-[42px]">
+                    <i class="ri-upload-cloud-line mr-1"></i> Upload Test
+                </button>
+            </form>
+        </div>
+        @endif
+    @endif
 </div>
 
 <script>
@@ -128,6 +150,16 @@ function showTab(tab) {
     });
     event.target.classList.remove('border-transparent', 'text-gray-500');
     event.target.classList.add('border-blue-500', 'text-blue-600');
+
+    // Tampilkan fitur Test Upload jika tab google_drive aktif
+    const testSection = document.getElementById('test-upload-section');
+    if (testSection) {
+        if (tab === 'google_drive') {
+            testSection.classList.remove('hidden');
+        } else {
+            testSection.classList.add('hidden');
+        }
+    }
 }
 </script>
 @endsection
