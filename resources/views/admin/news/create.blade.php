@@ -16,7 +16,7 @@
                     <input type="text" name="title" value="{{ old('title') }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1"><i class="ri-image-line mr-1"></i>Gambar <span class="text-xs text-gray-400">(830 × 455 px)</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"><i class="ri-image-line mr-1"></i>Gambar <span class="text-xs text-gray-400">(830 × 455 px, Maks. 1MB)</span></label>
                     <input type="file" name="image" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700">
                 </div>
                 <div>

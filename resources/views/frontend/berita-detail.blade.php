@@ -4,7 +4,7 @@
 
 @section('og_title', $news->title)
 @section('og_description', \Illuminate\Support\Str::limit(strip_tags($news->excerpt ?? $news->content ?? ''), 160))
-@section('og_image', $news->image ? asset('storage/' . $news->image) : asset('logo_pupr.webp'))
+@section('og_image', $news->image ? $news->image_url : asset('logo_pupr.webp'))
 @section('og_url', route('berita.detail', $news->slug))
 
 @section('json_ld')
@@ -14,7 +14,7 @@
   "@@type": "NewsArticle",
   "headline": {{ json_encode($news->title) }},
   "description": {{ json_encode(\Illuminate\Support\Str::limit(strip_tags($news->excerpt ?? ''), 160)) }},
-  "image": {{ json_encode($news->image ? asset('storage/' . $news->image) : asset('logo_pupr.webp')) }},
+  "image": {{ json_encode($news->image ? $news->image_url : asset('logo_pupr.webp')) }},
   "datePublished": "{{ $news->published_at ? $news->published_at->toIso8601String() : $news->created_at->toIso8601String() }}",
   "dateModified": "{{ $news->updated_at->toIso8601String() }}",
   "author": { "@@type": "Organization", "name": "PUPR" },
@@ -56,7 +56,7 @@
     {{-- Featured Image --}}
     @if($news->image)
         <div class="mb-8 rounded-xl overflow-hidden">
-            <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full max-h-[480px] object-cover" loading="lazy">
+            <img src="{{ $news->image_url }}" alt="{{ $news->title }}" class="w-full max-h-[480px] object-cover" loading="lazy">
         </div>
     @endif
 

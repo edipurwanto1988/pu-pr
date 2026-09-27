@@ -32,7 +32,7 @@
                 <a href="{{ route('berita.detail', $item->slug) }}" class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                     <div class="aspect-video bg-gray-100 overflow-hidden">
                         @if($item->image)
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-300"><i class="ri-article-line text-4xl"></i></div>
                         @endif

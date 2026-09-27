@@ -34,14 +34,22 @@ class NewsController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['title' => 'required|string|max:255']);
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
+        ]);
 
         $data = $request->except('image');
         $data['slug'] = \Str::slug($request->title);
         $data['created_by'] = auth()->id();
         
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('news', 'public');
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('image'), 'Berita_');
+            if ($driveId) {
+                $data['image'] = 'gdrive:' . $driveId;
+            } else {
+                $data['image'] = $request->file('image')->store('news', 'public');
+            }
         }
 
         News::create($data);
@@ -61,11 +69,24 @@ class NewsController extends Controller
 
     public function update(Request $request, News $news)
     {
-        $data = $request->all();
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
+        ]);
+
+        $data = $request->except('image');
 
         if ($request->hasFile('image')) {
-            if ($news->image) Storage::disk('public')->delete($news->image);
-            $data['image'] = $request->file('image')->store('news', 'public');
+            if ($news->image && !\Str::startsWith($news->image, 'gdrive:')) {
+                Storage::disk('public')->delete($news->image);
+            }
+            
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('image'), 'Berita_');
+            if ($driveId) {
+                $data['image'] = 'gdrive:' . $driveId;
+            } else {
+                $data['image'] = $request->file('image')->store('news', 'public');
+            }
         }
 
         if ($request->filled('published_at')) {

@@ -20,4 +20,10 @@ class News extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function getImageUrlAttribute()
+    {
+        if (empty($this->image)) return null;
+        return \App\Services\GoogleDriveService::getUrl($this->image);
+    }
 }

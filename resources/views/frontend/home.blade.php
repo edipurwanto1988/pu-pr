@@ -273,7 +273,7 @@
                 <a href="{{ route('berita.detail', $berita->slug) }}" class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100">
                     <div class="aspect-video bg-gray-100 overflow-hidden relative">
                         @if($berita->image)
-                            <img src="{{ asset('storage/' . $berita->image) }}" alt="{{ $berita->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                            <img src="{{ $berita->image_url }}" alt="{{ $berita->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
                                 <i class="ri-article-line text-4xl"></i>
