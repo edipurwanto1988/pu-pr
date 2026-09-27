@@ -69,5 +69,15 @@ tinymce.init({
     branding: false,
     promotion: false,
 });
+
+document.querySelector('input[type="file"][name="image"]').addEventListener('change', function() {
+    if (this.files[0]) {
+        var fileSize = this.files[0].size / 1024 / 1024; // in MB
+        if (fileSize > 1) {
+            alert('Ukuran gambar tidak boleh lebih dari 1 MB!');
+            this.value = ''; // clear the input
+        }
+    }
+});
 </script>
 @endsection
