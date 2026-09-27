@@ -49,4 +49,56 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil disimpan');
     }
+
+    public function connectGoogleDrive()
+    {
+        $clientId = Setting::where('name', 'google_drive_client_id')->value('value');
+        
+        if (empty($clientId)) {
+            return redirect()->route('admin.settings.index')->with('error', 'Silakan isi dan simpan Client ID terlebih dahulu.');
+        }
+
+        $redirectUri = route('admin.settings.google-drive.callback');
+        $scope = 'https://www.googleapis.com/auth/drive';
+        $authUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id={$clientId}&redirect_uri={$redirectUri}&response_type=code&scope={$scope}&access_type=offline&prompt=consent";
+
+        return redirect($authUrl);
+    }
+
+    public function googleDriveCallback(Request $request)
+    {
+        if ($request->has('error')) {
+            return redirect()->route('admin.settings.index')->with('error', 'Otorisasi Google Drive dibatalkan.');
+        }
+
+        $code = $request->get('code');
+        $clientId = Setting::where('name', 'google_drive_client_id')->value('value');
+        $clientSecret = Setting::where('name', 'google_drive_client_secret')->value('value');
+        $redirectUri = route('admin.settings.google-drive.callback');
+
+        if (empty($clientId) || empty($clientSecret)) {
+            return redirect()->route('admin.settings.index')->with('error', 'Client ID atau Client Secret tidak ditemukan.');
+        }
+
+        $response = \Illuminate\Support\Facades\Http::asForm()->post('https://oauth2.googleapis.com/token', [
+            'code' => $code,
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'redirect_uri' => $redirectUri,
+            'grant_type' => 'authorization_code',
+        ]);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            
+            if (isset($data['refresh_token'])) {
+                Setting::where('name', 'google_drive_refresh_token')->update(['value' => $data['refresh_token']]);
+                return redirect()->route('admin.settings.index')->with('success', 'Google Drive berhasil disambungkan! Refresh Token telah disimpan.');
+            } else {
+                return redirect()->route('admin.settings.index')->with('error', 'Gagal mendapatkan Refresh Token. Pastikan Anda mengklik "Sambungkan" ulang dan mengizinkan akses.');
+            }
+        }
+
+        return redirect()->route('admin.settings.index')->with('error', 'Gagal terhubung ke Google Drive API: ' . $response->body());
+    }
 }

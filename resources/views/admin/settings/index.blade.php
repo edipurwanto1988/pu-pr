@@ -59,7 +59,8 @@
                                     @elseif($setting->name === 'whatsapp_message')<i class="ri-chat-3-line mr-1"></i> Pesan WhatsApp
                                     @elseif($setting->name === 'google_drive_client_id')<i class="ri-key-line mr-1"></i> Client ID
                                     @elseif($setting->name === 'google_drive_client_secret')<i class="ri-lock-password-line mr-1"></i> Client Secret
-                                    @elseif($setting->name === 'google_drive_refresh_token')<i class="ri-refresh-line mr-1"></i> Refresh Token
+                                    @elseif($setting->name === 'google_drive_refresh_token')
+                                        <i class="ri-refresh-line mr-1"></i> Refresh Token
                                     @elseif($setting->name === 'google_drive_folder_id')<i class="ri-folder-line mr-1"></i> Folder ID
                                     @else{{ $setting->name }}
                                     @endif
@@ -85,7 +86,17 @@
                                     @if($setting->name === 'whatsapp_message')
                                         <textarea name="settings[{{ $loop->index }}][value]" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ $setting->value }}</textarea>
                                     @else
-                                        <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        @if($setting->name === 'google_drive_refresh_token')
+                                            <div class="flex gap-2">
+                                                <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50" readonly placeholder="Klik tombol Sambungkan untuk mengisi token ini secara otomatis">
+                                                <a href="{{ route('admin.settings.google-drive.connect') }}" class="mt-1 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150 whitespace-nowrap">
+                                                    <i class="ri-google-fill mr-2"></i> Sambungkan
+                                                </a>
+                                            </div>
+                                            <p class="mt-1 text-xs text-gray-500">Pastikan Anda telah mengisi dan <b>menyimpan</b> Client ID dan Client Secret terlebih dahulu sebelum menyambungkan.</p>
+                                        @else
+                                            <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        @endif
                                     @endif
                                     <input type="hidden" name="settings[{{ $loop->index }}][name]" value="{{ $setting->name }}">
                                 @endif

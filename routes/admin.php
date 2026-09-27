@@ -22,6 +22,8 @@ Route::middleware(['auth', 'role:super-admin|admin|umkm-ikm'])->prefix('admin')-
     Route::middleware('role:super-admin|admin')->group(function () {
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::get('/settings/google-drive/connect', [SettingController::class, 'connectGoogleDrive'])->name('settings.google-drive.connect');
+        Route::get('/settings/google-drive/callback', [SettingController::class, 'googleDriveCallback'])->name('settings.google-drive.callback');
 
         Route::resource('/categories', CategoryController::class);
         Route::post('/menus/reorder', [MenuController::class, 'reorder'])->name('menus.reorder');
