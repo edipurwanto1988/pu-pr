@@ -233,7 +233,16 @@ class ProductController extends Controller
             ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
 
         if ($uploadResponse->successful()) {
-            return $uploadResponse->json('id');
+            $fileId = $uploadResponse->json('id');
+            
+            // Set permission to public (anyone with the link can view)
+            \Illuminate\Support\Facades\Http::withToken($accessToken)
+                ->post("https://www.googleapis.com/drive/v3/files/{$fileId}/permissions", [
+                    'type' => 'anyone',
+                    'role' => 'reader',
+                ]);
+
+            return $fileId;
         }
 
         return false;

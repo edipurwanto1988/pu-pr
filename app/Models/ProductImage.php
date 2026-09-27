@@ -18,7 +18,8 @@ class ProductImage extends Model
     {
         if (\Str::startsWith($this->image_path, 'gdrive:')) {
             $driveId = str_replace('gdrive:', '', $this->image_path);
-            return "https://drive.google.com/uc?export=view&id={$driveId}";
+            // Menggunakan endpoint thumbnail agar bisa di-load di <img> tag tanpa error redirect
+            return "https://drive.google.com/thumbnail?id={$driveId}&sz=w1000";
         }
         
         return asset('storage/' . $this->image_path);

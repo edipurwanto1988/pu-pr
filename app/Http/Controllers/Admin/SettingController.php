@@ -145,6 +145,14 @@ class SettingController extends Controller
 
         if ($uploadResponse->successful()) {
             $fileId = $uploadResponse->json('id');
+            
+            // Set permission to public
+            \Illuminate\Support\Facades\Http::withToken($accessToken)
+                ->post("https://www.googleapis.com/drive/v3/files/{$fileId}/permissions", [
+                    'type' => 'anyone',
+                    'role' => 'reader',
+                ]);
+
             return redirect()->route('admin.settings.index')->with('success', 'File berhasil diupload ke Google Drive! ID File: ' . $fileId);
         }
 
