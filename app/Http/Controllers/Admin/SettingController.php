@@ -12,7 +12,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $tabs = ['umum', 'seo', 'sosial_media'];
+        $tabs = ['umum', 'seo', 'sosial_media', 'google_drive'];
         $settings = Setting::whereIn('tab', $tabs)->get();
         
         $grouped = $settings->groupBy('tab');

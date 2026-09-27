@@ -24,6 +24,9 @@
                 <a href="#sosial_media" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('sosial_media')">
                     <i class="ri-share-line mr-1"></i> Sosial Media
                 </a>
+                <a href="#google_drive" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('google_drive')">
+                    <i class="ri-drive-line mr-1"></i> Google Drive
+                </a>
             </nav>
         </div>
 
@@ -54,6 +57,10 @@
                                     @elseif($setting->name === 'twitter_url')<i class="ri-twitter-line mr-1"></i> Twitter/X URL
                                     @elseif($setting->name === 'whatsapp_number')<i class="ri-whatsapp-line mr-1"></i> Nomor WhatsApp
                                     @elseif($setting->name === 'whatsapp_message')<i class="ri-chat-3-line mr-1"></i> Pesan WhatsApp
+                                    @elseif($setting->name === 'google_drive_client_id')<i class="ri-key-line mr-1"></i> Client ID
+                                    @elseif($setting->name === 'google_drive_client_secret')<i class="ri-lock-password-line mr-1"></i> Client Secret
+                                    @elseif($setting->name === 'google_drive_refresh_token')<i class="ri-refresh-line mr-1"></i> Refresh Token
+                                    @elseif($setting->name === 'google_drive_folder_id')<i class="ri-folder-line mr-1"></i> Folder ID
                                     @else{{ $setting->name }}
                                     @endif
                                 </label>
