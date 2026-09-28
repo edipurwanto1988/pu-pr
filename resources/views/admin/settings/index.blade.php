@@ -54,6 +54,12 @@
             <div class="p-6 space-y-6">
                 @foreach($tabs as $tab)
                 <div id="tab-pane-{{ $tab }}" class="tab-pane {{ $loop->first ? '' : 'hidden' }}">
+                    @if($tab === 'google_drive')
+                        <div class="mb-5 p-3.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-sm flex items-center gap-2">
+                            <i class="ri-lock-line text-lg text-amber-600 shrink-0"></i>
+                            <span>Pengaturan Google Drive saat ini <strong>dinonaktifkan sementara</strong> (tombol Sambungkan dan Simpan di-disable).</span>
+                        </div>
+                    @endif
                     @if($grouped->has($tab))
                         @foreach($grouped[$tab] as $setting)
                             <div class="mb-4">
@@ -105,14 +111,14 @@
                                     @else
                                         @if($setting->name === 'google_drive_refresh_token')
                                             <div class="flex gap-2">
-                                                <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50" readonly placeholder="Klik tombol Sambungkan untuk mengisi token ini secara otomatis">
-                                                <a href="{{ route('admin.settings.google-drive.connect') }}" class="mt-1 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150 whitespace-nowrap">
+                                                <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50" readonly placeholder="Tombol Sambungkan dinonaktifkan sementara">
+                                                <button type="button" disabled class="mt-1 inline-flex items-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest cursor-not-allowed opacity-60 whitespace-nowrap" title="Tombol Sambungkan dinonaktifkan sementara">
                                                     <i class="ri-google-fill mr-2"></i> Sambungkan
-                                                </a>
+                                                </button>
                                             </div>
-                                            <p class="mt-1 text-xs text-gray-500">Pastikan Anda telah mengisi dan <b>menyimpan</b> Client ID dan Client Secret terlebih dahulu sebelum menyambungkan.</p>
+                                            <p class="mt-1 text-xs text-gray-500">Tombol Sambungkan Google Drive saat ini dinonaktifkan sementara.</p>
                                         @else
-                                            <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                            <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm {{ str_starts_with($setting->name, 'google_drive') ? 'bg-gray-50' : '' }}" {{ str_starts_with($setting->name, 'google_drive') ? 'readonly' : '' }}>
                                         @endif
                                     @endif
                                     <input type="hidden" name="settings[{{ $loop->index }}][name]" value="{{ $setting->name }}">
@@ -125,7 +131,7 @@
             </div>
 
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-                <button type="submit" class="px-4 py-2 bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b] font-medium">
+                <button type="submit" id="btn-save-settings" class="px-4 py-2 bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b] font-medium transition-all">
                     Simpan Perubahan
                 </button>
             </div>
@@ -203,6 +209,22 @@ function showTab(tabName, updateHash = true) {
             testSection.classList.remove('hidden');
         } else {
             testSection.classList.add('hidden');
+        }
+    }
+
+    // Atur tombol Simpan saat berada di tab Google Drive
+    const saveBtn = document.getElementById('btn-save-settings');
+    if (saveBtn) {
+        if (actualTab === 'google_drive') {
+            saveBtn.disabled = true;
+            saveBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-400');
+            saveBtn.classList.remove('bg-[#ca4e33]', 'hover:bg-[#b8432b]');
+            saveBtn.title = 'Tombol Simpan untuk Google Drive dinonaktifkan sementara';
+        } else {
+            saveBtn.disabled = false;
+            saveBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-400');
+            saveBtn.classList.add('bg-[#ca4e33]', 'hover:bg-[#b8432b]');
+            saveBtn.title = '';
         }
     }
 
