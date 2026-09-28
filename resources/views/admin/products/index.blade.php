@@ -94,7 +94,7 @@
                     <td class="px-6 py-4 text-right whitespace-nowrap">
                         <a href="{{ route('admin.products.show', $product) }}" class="text-blue-600 hover:text-blue-900 mr-2" title="Lihat"><i class="ri-eye-line"></i></a>
                         <a href="{{ route('admin.products.edit', $product) }}" class="text-yellow-600 hover:text-yellow-900 mr-2" title="Edit"><i class="ri-edit-line"></i></a>
-                        @if($product->status === 'pending')
+                        @if($product->status === 'pending' && !auth()->user()->hasRole('umkm-ikm'))
                             <form action="{{ route('admin.products.approve', $product) }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" class="text-emerald-600 hover:text-emerald-900 mr-2" title="Setujui"><i class="ri-check-double-line"></i></button>

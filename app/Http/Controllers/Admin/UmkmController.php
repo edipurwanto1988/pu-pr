@@ -220,6 +220,7 @@ class UmkmController extends Controller
 
     public function approve(UmkmProfile $umkm)
     {
+        abort_if(!auth()->user()->hasRole('super-admin'), 403);
         $umkm->update([
             'status' => 'approved',
             'validated_by' => auth()->id(),
@@ -230,6 +231,7 @@ class UmkmController extends Controller
 
     public function reject(Request $request, UmkmProfile $umkm)
     {
+        abort_if(!auth()->user()->hasRole('super-admin'), 403);
         $request->validate(['rejection_reason' => 'required|string']);
         
         $umkm->update([

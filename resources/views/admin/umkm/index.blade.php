@@ -102,7 +102,7 @@
                     <td class="px-6 py-4 text-right whitespace-nowrap">
                         <a href="{{ route('admin.umkm.show', $item) }}" class="text-blue-600 hover:text-blue-900 mr-3" title="Lihat"><i class="ri-eye-line"></i></a>
                         <a href="{{ route('admin.umkm.edit', $item) }}" class="text-yellow-600 hover:text-yellow-900 mr-3" title="Edit"><i class="ri-edit-line"></i></a>
-                        @if($item->status === 'pending')
+                        @if($item->status === 'pending' && auth()->user()->hasRole('super-admin'))
                             <form action="{{ route('admin.umkm.approve', $item) }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" class="text-emerald-600 hover:text-emerald-900 mr-2" title="Setujui"><i class="ri-check-line"></i></button>

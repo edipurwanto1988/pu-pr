@@ -158,6 +158,7 @@ class ProductController extends Controller
 
     public function approve(Product $product)
     {
+        abort_if(auth()->user()->hasRole('umkm-ikm'), 403);
         $product->update([
             'status' => 'approved',
             'validated_by' => auth()->id(),
@@ -168,6 +169,7 @@ class ProductController extends Controller
 
     public function reject(Request $request, Product $product)
     {
+        abort_if(auth()->user()->hasRole('umkm-ikm'), 403);
         $request->validate(['rejection_reason' => 'required|string']);
         
         $product->update([

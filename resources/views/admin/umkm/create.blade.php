@@ -7,7 +7,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6">
-        <form action="{{ route('admin.umkm.store') }}" method="POST">
+        <form action="{{ route('admin.umkm.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-8">
@@ -150,6 +150,19 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
                             <input type="text" name="whatsapp" value="{{ old('whatsapp') }}"
                                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Logo Usaha (Opsional, Maks 2MB)</label>
+                            <input type="file" name="logo" accept="image/*"
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Banner Usaha (Opsional, Maks 2MB)</label>
+                            <input type="file" name="banner" accept="image/*"
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                         </div>
                     </div>
 
