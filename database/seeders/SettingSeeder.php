@@ -24,7 +24,7 @@ class SettingSeeder extends Seeder
             ['name' => 'instagram_url', 'value' => '', 'tab' => 'sosial_media', 'type' => 'text'],
             ['name' => 'tiktok_url', 'value' => '', 'tab' => 'sosial_media', 'type' => 'text'],
             ['name' => 'twitter_url', 'value' => '', 'tab' => 'sosial_media', 'type' => 'text'],
-            ['name' => 'whatsapp_number', 'value' => '081365695586', 'tab' => 'sosial_media', 'type' => 'text'],
+            ['name' => 'whatsapp_number', 'value' => '6282390439561', 'tab' => 'sosial_media', 'type' => 'text'],
             ['name' => 'whatsapp_message', 'value' => 'Halo, saya ingin bertanya tentang produk/jasa di PUPR', 'tab' => 'sosial_media', 'type' => 'text'],
         ];
 

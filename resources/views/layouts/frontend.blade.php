@@ -8,7 +8,10 @@
     <link rel="canonical" href="{{ $ogUrl ?? request()->url() }}">
     <meta name="description" content="{{ strip_tags($__env->yieldContent('og_description') ?: 'Platform Promosi UMKM/IKM Kota Pekanbaru') }}">
     <meta name="keywords" content="PUPR, UMKM, IKM, Pekanbaru, Pekanbaru, produk lokal, jasa lokal, promosi usaha, pelaku usaha">
-    @php $favicon = \App\Models\Setting::where('name', 'favicon')->value('value'); @endphp
+    @php 
+        $favicon = \App\Models\Setting::where('name', 'favicon')->value('value');
+        $contactPhone = \App\Models\Setting::where('name', 'whatsapp_number')->value('value') ?: '6282390439561';
+    @endphp
     <link rel="icon" href="{{ $favicon ? asset($favicon) : asset('logo_pupr.webp') }}" type="image/webp">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet">
@@ -38,7 +41,7 @@
     <div class="bg-[#ca4e33] text-white/80 text-xs py-1.5 hidden md:block">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <span class="flex items-center gap-1"><i class="ri-phone-line"></i> 0813-6569-5586</span>
+                <span class="flex items-center gap-1"><i class="ri-phone-line"></i> {{ $contactPhone }}</span>
                 <span class="flex items-center gap-1"><i class="ri-mail-line"></i> info@pu-pr.com</span>
             </div>
             <div class="flex items-center gap-3">
@@ -197,7 +200,7 @@
                         </li>
                         <li class="flex items-center gap-2.5 text-sm text-gray-400">
                             <i class="ri-phone-line text-base shrink-0"></i>
-                            <span>0813-6569-5586</span>
+                            <span>{{ $contactPhone }}</span>
                         </li>
                         <li class="flex items-center gap-2.5 text-sm text-gray-400">
                             <i class="ri-mail-line text-base shrink-0"></i>

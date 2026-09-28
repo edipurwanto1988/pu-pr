@@ -18,7 +18,7 @@
   "logo": "{{ asset('logo_pupr.webp') }}",
   "description": "Platform Promosi UMKM/IKM Kota Pekanbaru",
   "address": { "@@type": "PostalAddress", "addressLocality": "Pekanbaru", "addressRegion": "Riau", "addressCountry": "ID" },
-  "contactPoint": { "@@type": "ContactPoint", "telephone": "+62-813-6569-5586", "contactType": "customer service" }
+  "contactPoint": { "@@type": "ContactPoint", "telephone": "+6282390439561", "contactType": "customer service" }
 }
 </script>
 @endsection
