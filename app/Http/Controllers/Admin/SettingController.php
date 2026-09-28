@@ -47,7 +47,10 @@ class SettingController extends Controller
             }
         }
 
-        return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil disimpan');
+        $activeTab = $request->input('active_tab');
+        $hash = $activeTab ? '#' . $activeTab : '';
+
+        return redirect()->to(route('admin.settings.index') . $hash)->with('success', 'Pengaturan berhasil disimpan');
     }
 
     public function connectGoogleDrive()
@@ -55,7 +58,7 @@ class SettingController extends Controller
         $clientId = Setting::where('name', 'google_drive_client_id')->value('value');
         
         if (empty($clientId)) {
-            return redirect()->route('admin.settings.index')->with('error', 'Silakan isi dan simpan Client ID terlebih dahulu.');
+            return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Silakan isi dan simpan Client ID terlebih dahulu.');
         }
 
         $redirectUri = route('admin.settings.google-drive.callback');
@@ -68,7 +71,7 @@ class SettingController extends Controller
     public function googleDriveCallback(Request $request)
     {
         if ($request->has('error')) {
-            return redirect()->route('admin.settings.index')->with('error', 'Otorisasi Google Drive dibatalkan.');
+            return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Otorisasi Google Drive dibatalkan.');
         }
 
         $code = $request->get('code');
@@ -77,7 +80,7 @@ class SettingController extends Controller
         $redirectUri = route('admin.settings.google-drive.callback');
 
         if (empty($clientId) || empty($clientSecret)) {
-            return redirect()->route('admin.settings.index')->with('error', 'Client ID atau Client Secret tidak ditemukan.');
+            return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Client ID atau Client Secret tidak ditemukan.');
         }
 
         $response = \Illuminate\Support\Facades\Http::asForm()->post('https://oauth2.googleapis.com/token', [
@@ -93,13 +96,13 @@ class SettingController extends Controller
             
             if (isset($data['refresh_token'])) {
                 Setting::where('name', 'google_drive_refresh_token')->update(['value' => $data['refresh_token']]);
-                return redirect()->route('admin.settings.index')->with('success', 'Google Drive berhasil disambungkan! Refresh Token telah disimpan.');
+                return redirect()->to(route('admin.settings.index') . '#googledrive')->with('success', 'Google Drive berhasil disambungkan! Refresh Token telah disimpan.');
             } else {
-                return redirect()->route('admin.settings.index')->with('error', 'Gagal mendapatkan Refresh Token. Pastikan Anda mengklik "Sambungkan" ulang dan mengizinkan akses.');
+                return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Gagal mendapatkan Refresh Token. Pastikan Anda mengklik "Sambungkan" ulang dan mengizinkan akses.');
             }
         }
 
-        return redirect()->route('admin.settings.index')->with('error', 'Gagal terhubung ke Google Drive API: ' . $response->body());
+        return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Gagal terhubung ke Google Drive API: ' . $response->body());
     }
 
     public function testUploadGoogleDrive(Request $request)
@@ -114,7 +117,7 @@ class SettingController extends Controller
         $folderId = Setting::where('name', 'google_drive_folder_id')->value('value');
 
         if (empty($clientId) || empty($clientSecret) || empty($refreshToken) || empty($folderId)) {
-            return redirect()->route('admin.settings.index')->with('error', 'Konfigurasi Google Drive belum lengkap (Pastikan Folder ID juga sudah diisi).');
+            return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Konfigurasi Google Drive belum lengkap (Pastikan Folder ID juga sudah diisi).');
         }
 
         // Dapatkan Access Token baru menggunakan Refresh Token
@@ -126,7 +129,7 @@ class SettingController extends Controller
         ]);
 
         if (!$tokenResponse->successful()) {
-            return redirect()->route('admin.settings.index')->with('error', 'Gagal mendapatkan Access Token: ' . $tokenResponse->body());
+            return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Gagal mendapatkan Access Token: ' . $tokenResponse->body());
         }
 
         $accessToken = $tokenResponse->json('access_token');
@@ -153,9 +156,9 @@ class SettingController extends Controller
                     'role' => 'reader',
                 ]);
 
-            return redirect()->route('admin.settings.index')->with('success', 'File berhasil diupload ke Google Drive! ID File: ' . $fileId);
+            return redirect()->to(route('admin.settings.index') . '#googledrive')->with('success', 'File berhasil diupload ke Google Drive! ID File: ' . $fileId);
         }
 
-        return redirect()->route('admin.settings.index')->with('error', 'Gagal mengupload file: ' . $uploadResponse->body());
+        return redirect()->to(route('admin.settings.index') . '#googledrive')->with('error', 'Gagal mengupload file: ' . $uploadResponse->body());
     }
 }

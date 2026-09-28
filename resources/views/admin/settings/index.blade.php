@@ -30,17 +30,17 @@
 
     <div class="bg-white rounded-lg shadow">
         <div class="border-b border-gray-200">
-            <nav class="-mb-px flex space-x-8 px-6">
-                <a href="#umum" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('umum')">
+            <nav data-tabs-nav class="-mb-px flex space-x-8 px-6 overflow-x-auto">
+                <a href="#umum" id="tab-link-umum" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors" onclick="showTab('umum'); return false;">
                     <i class="ri-settings-3-line mr-1"></i> Umum
                 </a>
-                <a href="#seo" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('seo')">
+                <a href="#seo" id="tab-link-seo" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors" onclick="showTab('seo'); return false;">
                     <i class="ri-seo-line mr-1"></i> SEO
                 </a>
-                <a href="#sosial_media" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('sosial_media')">
+                <a href="#sosialmedia" id="tab-link-sosial_media" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors" onclick="showTab('sosial_media'); return false;">
                     <i class="ri-share-line mr-1"></i> Sosial Media
                 </a>
-                <a href="#google_drive" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('google_drive')">
+                <a href="#googledrive" id="tab-link-google_drive" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors" onclick="showTab('google_drive'); return false;">
                     <i class="ri-drive-line mr-1"></i> Google Drive
                 </a>
             </nav>
@@ -49,6 +49,7 @@
         <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" name="active_tab" id="active_tab" value="umum">
 
             <div class="p-6 space-y-6">
                 @foreach($tabs as $tab)
@@ -155,27 +156,83 @@
 </div>
 
 <script>
-function showTab(tab) {
-    event.preventDefault();
+const tabAliases = {
+    'googledrive': 'google_drive',
+    'google_drive': 'google_drive',
+    'google-drive': 'google_drive',
+    'sosialmedia': 'sosial_media',
+    'sosial_media': 'sosial_media',
+    'sosial-media': 'sosial_media',
+    'seo': 'seo',
+    'umum': 'umum'
+};
+
+const canonicalHashes = {
+    'google_drive': 'googledrive',
+    'sosial_media': 'sosialmedia',
+    'seo': 'seo',
+    'umum': 'umum'
+};
+
+function showTab(tabName, updateHash = true) {
+    const actualTab = tabAliases[tabName] || tabName;
+    const targetContent = document.getElementById('tab-' + actualTab);
+    if (!targetContent) return;
+
+    // Sembunyikan semua konten tab
     document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.add('hidden'));
-    document.getElementById('tab-' + tab).classList.remove('hidden');
+    targetContent.classList.remove('hidden');
     
-    document.querySelectorAll('nav a').forEach(el => {
+    // Reset styling semua tab link
+    document.querySelectorAll('nav[data-tabs-nav] a').forEach(el => {
         el.classList.remove('border-blue-500', 'text-blue-600');
         el.classList.add('border-transparent', 'text-gray-500');
     });
-    event.target.classList.remove('border-transparent', 'text-gray-500');
-    event.target.classList.add('border-blue-500', 'text-blue-600');
+
+    // Aktifkan tab link yang sesuai
+    const activeLink = document.getElementById('tab-link-' + actualTab);
+    if (activeLink) {
+        activeLink.classList.remove('border-transparent', 'text-gray-500');
+        activeLink.classList.add('border-blue-500', 'text-blue-600');
+    }
 
     // Tampilkan fitur Test Upload jika tab google_drive aktif
     const testSection = document.getElementById('test-upload-section');
     if (testSection) {
-        if (tab === 'google_drive') {
+        if (actualTab === 'google_drive') {
             testSection.classList.remove('hidden');
         } else {
             testSection.classList.add('hidden');
         }
     }
+
+    const hash = canonicalHashes[actualTab] || actualTab;
+    const activeTabInput = document.getElementById('active_tab');
+    if (activeTabInput) {
+        activeTabInput.value = hash;
+    }
+
+    // Ubah URL hash di browser
+    if (updateHash) {
+        if (window.location.hash !== '#' + hash) {
+            history.pushState(null, '', '#' + hash);
+        }
+    }
+}
+
+function handleHashChange() {
+    const rawHash = (window.location.hash || '').replace('#', '').toLowerCase();
+    if (rawHash && tabAliases[rawHash]) {
+        showTab(tabAliases[rawHash], false);
+    }
+}
+
+window.addEventListener('hashchange', handleHashChange);
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleHashChange);
+} else {
+    handleHashChange();
 }
 </script>
 @endsection
