@@ -11,6 +11,46 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Responsive Sidebar & Main Wrapper */
+        @media (max-width: 767px) {
+            #admin-sidebar {
+                transform: translateX(-100%) !important;
+                -webkit-transform: translateX(-100%) !important;
+                transition: transform 0.3s ease-in-out !important;
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                width: 16rem !important;
+                z-index: 50 !important;
+                display: block !important;
+            }
+            #admin-sidebar.sidebar-open {
+                transform: translateX(0) !important;
+                -webkit-transform: translateX(0) !important;
+            }
+            .admin-main-wrapper {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+        @media (min-width: 768px) {
+            #admin-sidebar {
+                transform: translateX(0) !important;
+                -webkit-transform: translateX(0) !important;
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                width: 16rem !important;
+            }
+            .admin-main-wrapper {
+                margin-left: 16rem !important;
+            }
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
     <!-- Backdrop for mobile sidebar -->
@@ -18,7 +58,7 @@
 
     <div class="min-h-screen flex flex-col md:flex-row">
         <!-- Sidebar -->
-        <aside id="admin-sidebar" class="w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out h-full overflow-y-auto">
+        <aside id="admin-sidebar" class="w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-50 h-full overflow-y-auto">
             <div class="p-4 sm:p-6 border-b border-gray-200 flex items-center justify-between">
                 <h1 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
                     <img src="{{ asset('logo_pupr.webp') }}" alt="Logo" class="h-8 w-8 object-contain">Admin
@@ -103,7 +143,7 @@
         </aside>
 
         <!-- Main Wrapper -->
-        <div class="flex-1 md:ml-64 flex flex-col min-w-0 min-h-screen">
+        <div class="admin-main-wrapper flex-1 md:ml-64 flex flex-col min-w-0 min-h-screen">
             <header class="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 sticky top-0 z-30 shadow-sm">
                 <div class="flex justify-between items-center gap-3">
                     <div class="flex items-center gap-3 min-w-0">
@@ -134,15 +174,14 @@
     function toggleSidebar() {
         const sidebar = document.getElementById('admin-sidebar');
         const backdrop = document.getElementById('sidebar-backdrop');
-        const isClosed = sidebar.classList.contains('-translate-x-full');
-        if (isClosed) {
-            sidebar.classList.remove('-translate-x-full');
+        if (!sidebar) return;
+        sidebar.classList.toggle('sidebar-open');
+        if (sidebar.classList.contains('sidebar-open')) {
             backdrop.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden', 'md:overflow-auto');
+            document.body.classList.add('overflow-hidden');
         } else {
-            sidebar.classList.add('-translate-x-full');
             backdrop.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden', 'md:overflow-auto');
+            document.body.classList.remove('overflow-hidden');
         }
     }
 
