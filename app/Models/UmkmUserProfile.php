@@ -9,6 +9,7 @@ class UmkmUserProfile extends Model
     protected $fillable = [
         'user_id',
         'kta_number',
+        'nik_number',
         'business_actor_name',
         'nib',
         'business_type',

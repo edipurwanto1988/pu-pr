@@ -14,9 +14,15 @@
         @csrf
         
         <div class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">No. KTA (NO NIK KTP)</label>
-                <input type="text" name="kta_number" value="{{ old('kta_number', $profile->kta_number) }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">No. KTA</label>
+                    <input type="text" name="kta_number" value="{{ old('kta_number', $profile->kta_number) }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan No. KTA">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">NO NIK KTP</label>
+                    <input type="text" name="nik_number" value="{{ old('nik_number', $profile->nik_number) }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Masukkan NO NIK KTP">
+                </div>
             </div>
 
             <div>
@@ -114,6 +120,12 @@
                     @if($profile->payment_proof) <img src="{{ asset('storage/' . $profile->payment_proof) }}" class="h-20 mb-2"> @endif
                     <input type="file" name="payment_proof" accept="image/*" class="w-full text-sm">
                 </div>
+            </div>
+
+            <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-900">
+                <p class="font-semibold mb-1"><i class="ri-bank-card-line mr-1"></i> Transfer biaya kartu anggota ke :</p>
+                <p class="text-sm font-medium">Rek Bank Syariah Mandiri (BSI) : <span class="font-bold text-blue-700">7273362918</span></p>
+                <p class="text-sm font-medium">An. <span class="font-bold">Suci Damaiyanti</span></p>
             </div>
         </div>
         

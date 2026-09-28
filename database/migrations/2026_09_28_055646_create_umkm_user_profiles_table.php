@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('umkm_user_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('kta_number')->nullable(); // No. KTA (NO NIK KTP)
+            $table->string('kta_number')->nullable(); // No. KTA
+            $table->string('nik_number')->nullable(); // NO NIK KTP
             $table->string('business_actor_name')->nullable(); // NAMA PELAKU USAHA
             $table->string('nib')->nullable(); // NIB : BAGI YANG ADA
             $table->string('business_type')->nullable(); // JENIS USAHA

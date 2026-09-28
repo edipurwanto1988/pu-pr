@@ -28,6 +28,7 @@ class UmkmUserProfileController extends Controller
 
         $request->validate([
             'kta_number' => 'nullable|string|max:255',
+            'nik_number' => 'nullable|string|max:255',
             'business_actor_name' => 'nullable|string|max:255',
             'nib' => 'nullable|string|max:255',
             'business_type' => 'nullable|string|max:255',
