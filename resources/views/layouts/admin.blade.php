@@ -9,13 +9,23 @@
     <link rel="icon" href="{{ $favicon ? asset($favicon) : asset('logo_pupr.webp') }}" type="image/webp">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-gray-50">
-    <div class="min-h-screen flex">
-        <aside class="w-64 bg-white border-r border-gray-200 fixed h-full overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
-                <h1 class="text-xl font-semibold text-gray-800 flex items-center gap-2"><img src="{{ asset('logo_pupr.webp') }}" alt="Logo" class="h-8 w-8 object-contain">Admin</h1>
+<body class="font-sans antialiased bg-gray-50 text-gray-900">
+    <!-- Backdrop for mobile sidebar -->
+    <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
+
+    <div class="min-h-screen flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <aside id="admin-sidebar" class="w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out h-full overflow-y-auto">
+            <div class="p-4 sm:p-6 border-b border-gray-200 flex items-center justify-between">
+                <h1 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                    <img src="{{ asset('logo_pupr.webp') }}" alt="Logo" class="h-8 w-8 object-contain">Admin
+                </h1>
+                <button type="button" onclick="toggleSidebar()" class="md:hidden p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none" title="Tutup Menu">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
             </div>
             <nav class="p-4 space-y-1">
                 @if(auth()->user()->hasRole('umkm-ikm'))
@@ -56,9 +66,9 @@
                 <div>
                     <button type="button" onclick="toggleMaster()" class="w-full flex items-center justify-between px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ $isMasterActive ? 'bg-gray-100' : '' }}">
                         <span><i class="ri-database-2-line mr-2"></i> Master</span>
-                        <i id="master-arrow" class="ri-arrow-down-s-line transition-transform {{ $isMasterActive ? 'rotate-0' : 'rotate-0' }}"></i>
+                        <i id="master-arrow" class="ri-arrow-down-s-line transition-transform {{ $isMasterActive ? 'rotate-180' : 'rotate-0' }}"></i>
                     </button>
-                    <div id="master-submenu" class="hidden ml-4 mt-1 space-y-1">
+                    <div id="master-submenu" class="{{ $isMasterActive ? '' : 'hidden' }} ml-4 mt-1 space-y-1">
                         <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 text-gray-900' : '' }}">
                             <i class="ri-user-line mr-2"></i> User
                         </a>
@@ -92,29 +102,50 @@
             </nav>
         </aside>
 
-        <div class="ml-64 flex-1">
-            <header class="bg-white border-b border-gray-200 px-8 py-4">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-lg font-semibold text-gray-800">@yield('title', 'Dashboard')</h2>
-                    <div class="flex items-center gap-4">
-                        <span class="text-gray-600">{{ auth()->user()->name }}</span>
+        <!-- Main Wrapper -->
+        <div class="flex-1 md:ml-64 flex flex-col min-w-0 min-h-screen">
+            <header class="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 sticky top-0 z-30 shadow-sm">
+                <div class="flex justify-between items-center gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <button type="button" onclick="toggleSidebar()" class="md:hidden p-2 -ml-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:outline-none" title="Buka Menu">
+                            <i class="ri-menu-line text-2xl"></i>
+                        </button>
+                        <h2 class="text-base sm:text-lg font-semibold text-gray-800 truncate">@yield('title', 'Dashboard')</h2>
+                    </div>
+                    <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+                        <span class="text-xs sm:text-sm text-gray-600 truncate max-w-[120px] sm:max-w-none">{{ auth()->user()->name }}</span>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="text-gray-600 hover:text-gray-800">
-                                <i class="ri-logout-box-r-line"></i> Logout
+                            <button type="submit" class="text-xs sm:text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1 px-2 py-1 rounded hover:bg-gray-100">
+                                <i class="ri-logout-box-r-line"></i> <span class="hidden sm:inline">Logout</span>
                             </button>
                         </form>
                     </div>
                 </div>
             </header>
 
-            <main class="p-8">
+            <main class="p-4 sm:p-6 lg:p-8 flex-1 min-w-0">
                 @yield('content')
             </main>
         </div>
     </div>
 
     <script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('admin-sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+        if (isClosed) {
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden', 'md:overflow-auto');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden', 'md:overflow-auto');
+        }
+    }
+
     function toggleMaster() {
         const submenu = document.getElementById('master-submenu');
         const arrow = document.getElementById('master-arrow');
