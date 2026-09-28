@@ -53,7 +53,7 @@
 
             <div class="p-6 space-y-6">
                 @foreach($tabs as $tab)
-                <div id="tab-{{ $tab }}" class="{{ $loop->first ? '' : 'hidden' }}">
+                <div id="tab-pane-{{ $tab }}" class="tab-pane {{ $loop->first ? '' : 'hidden' }}">
                     @if($grouped->has($tab))
                         @foreach($grouped[$tab] as $setting)
                             <div class="mb-4">
@@ -176,11 +176,11 @@ const canonicalHashes = {
 
 function showTab(tabName, updateHash = true) {
     const actualTab = tabAliases[tabName] || tabName;
-    const targetContent = document.getElementById('tab-' + actualTab);
+    const targetContent = document.getElementById('tab-pane-' + actualTab);
     if (!targetContent) return;
 
-    // Sembunyikan semua konten tab
-    document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.add('hidden'));
+    // Sembunyikan hanya konten tab (tab-pane), JANGAN sembunyikan tombol navigasi tab
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
     targetContent.classList.remove('hidden');
     
     // Reset styling semua tab link
