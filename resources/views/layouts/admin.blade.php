@@ -22,6 +22,9 @@
                 <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-100' : '' }}">
                     <i class="ri-dashboard-line mr-2"></i> Dashboard
                 </a>
+                <a href="{{ route('admin.profile.index') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.profile.*') ? 'bg-gray-100' : '' }}">
+                    <i class="ri-user-settings-line mr-2"></i> Profil
+                </a>
                 <a href="{{ route('admin.umkm.index') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.umkm.*') ? 'bg-gray-100' : '' }}">
                     <i class="ri-store-line mr-2"></i> UMKM/IKM
                 </a>

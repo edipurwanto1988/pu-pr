@@ -18,6 +18,10 @@ Route::middleware(['auth', 'role:super-admin|admin|umkm-ikm'])->prefix('admin')-
 
     Route::post('/categories/quick-store', [CategoryController::class, 'quickStore'])->name('categories.quick-store');
     Route::get('/umkm/kecamatan/{kecamatan}/kelurahans', [UmkmController::class, 'kelurahanByKecamatan'])->name('umkm.kelurahan-by-kecamatan');
+    
+    Route::get('/profile', [\App\Http\Controllers\Admin\UmkmUserProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile', [\App\Http\Controllers\Admin\UmkmUserProfileController::class, 'store'])->name('profile.store');
+
 
     Route::middleware('role:super-admin|admin')->group(function () {
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
