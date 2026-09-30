@@ -185,7 +185,7 @@ class ProductController extends Controller
 
     public function featured(Request $request, Product $product)
     {
-        $product->update(['is_featured' => $request->is_featured ?? false]);
+        $product->update(['is_featured' => $request->boolean('is_featured')]);
         return redirect()->route('admin.products.index')->with('success', 'Status featured diperbarui');
     }
 
