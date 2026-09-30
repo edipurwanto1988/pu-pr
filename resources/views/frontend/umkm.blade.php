@@ -22,8 +22,8 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-            @if($umkm->logo)
-                <img src="{{ asset('storage/' . $umkm->logo) }}" alt="{{ $umkm->business_name }}" class="w-full h-48 object-cover rounded-lg mb-4">
+            @if($umkm->banner)
+                <img src="{{ asset('storage/' . $umkm->banner) }}" alt="{{ $umkm->business_name }} Banner" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8 shadow-sm">
             @endif
             <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{{ $umkm->business_name }}</h1>
             <p class="text-sm text-gray-500 mb-4">{{ $umkm->type === 'umkm' ? 'UMKM' : 'IKM' }} - {{ $umkm->business_type === 'produk' ? 'Produk' : 'Jasa' }}</p>
