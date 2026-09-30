@@ -67,7 +67,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'umkm_profile_id' => 'required|exists:umkm_profiles,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:400',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $data = $request->except('image', 'images');
@@ -79,6 +79,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
+                $this->compressImageIfNeeded($image);
                 $driveId = $this->uploadToGoogleDrive($image);
                 
                 if ($driveId) {
@@ -119,7 +120,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'umkm_profile_id' => 'required|exists:umkm_profiles,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:400',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $data = $request->except('image', 'images');
@@ -131,6 +132,7 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             $lastOrder = $product->images()->max('order') ?? 0;
             foreach ($request->file('images') as $index => $image) {
+                $this->compressImageIfNeeded($image);
                 $driveId = $this->uploadToGoogleDrive($image);
                 
                 if ($driveId) {
@@ -248,5 +250,32 @@ class ProductController extends Controller
         }
 
         return false;
+    }
+
+    private function compressImageIfNeeded($file)
+    {
+        if ($file->getSize() > 800 * 1024) { // > 800 KB
+            try {
+                $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+                $img = $manager->read($file->path());
+                
+                // Scale down if width is greater than 1200px
+                $img->scaleDown(width: 1200);
+                
+                $mime = $file->getMimeType();
+                if ($mime === 'image/png') {
+                    $encoded = $img->toPng();
+                } elseif ($mime === 'image/webp') {
+                    $encoded = $img->toWebp(75);
+                } else {
+                    $encoded = $img->toJpeg(75);
+                }
+                
+                file_put_contents($file->path(), $encoded->toString());
+                clearstatcache(true, $file->path());
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Image compression failed: ' . $e->getMessage());
+            }
+        }
     }
 }

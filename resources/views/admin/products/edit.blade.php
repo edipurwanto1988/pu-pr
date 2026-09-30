@@ -7,6 +7,23 @@
         <h1 class="text-2xl font-semibold text-gray-800"><i class="ri-edit-line mr-2"></i>Edit Produk/Jasa</h1>
     </div>
 
+    @if ($errors->any())
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            <div class="font-semibold"><i class="ri-error-warning-line mr-1"></i> Terdapat kesalahan:</div>
+            <ul class="list-disc list-inside mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            <i class="ri-error-warning-line mr-1"></i> {{ session('error') }}
+        </div>
+    @endif
+
     <div class="bg-white rounded-lg shadow p-6">
         <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data">
             @csrf @method('PUT')
