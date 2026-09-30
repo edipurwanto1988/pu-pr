@@ -48,7 +48,7 @@
                         <div class="relative group">
                             <div class="aspect-square md:aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden shadow-sm border border-gray-100" id="mainImageWrap">
                                 @if($product->images->count() > 0)
-                                    <img id="mainImage" src="{{ $product->images->first()->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <img id="mainImage" src="{{ $product->images->first()->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-contain bg-white transition-transform duration-500 group-hover:scale-105">
                                 @else
                                     <div class="w-full h-full flex flex-col items-center justify-center text-gray-300 bg-gray-50">
                                         <i class="ri-image-2-line text-7xl mb-2"></i>
@@ -72,7 +72,7 @@
                                 @foreach($product->images as $i => $img)
                                     <button onclick="switchImage('{{ $img->image_url }}', this)" 
                                         class="shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 transition-all duration-300 relative @if($i === 0) border-[#ca4e33] ring-2 ring-[#ca4e33]/20 @else border-gray-100 hover:border-gray-300 @endif">
-                                        <img src="{{ $img->image_url }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover">
+                                        <img src="{{ $img->image_url }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover object-top bg-white">
                                         @if($i === 0)
                                             <div class="absolute inset-0 bg-[#ca4e33]/5"></div>
                                         @endif
