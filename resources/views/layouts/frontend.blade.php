@@ -34,6 +34,34 @@
     <meta name="twitter:description" content="{{ strip_tags($ogDescription) }}">
     <meta name="twitter:image" content="{{ $ogImage }}">
     @yield('json_ld')
+
+    @php
+        $googleSearchConsoleKey = \App\Models\Setting::where('name', 'google_search_console_key')->value('value');
+        $googleAnalyticsId = \App\Models\Setting::where('name', 'google_analytics_id')->value('value');
+    @endphp
+
+    @if($googleSearchConsoleKey)
+        @if(str_contains($googleSearchConsoleKey, '<meta'))
+            {!! $googleSearchConsoleKey !!}
+        @else
+            <meta name="google-site-verification" content="{{ $googleSearchConsoleKey }}" />
+        @endif
+    @endif
+
+    @if($googleAnalyticsId)
+        @if(str_contains($googleAnalyticsId, '<script'))
+            {!! $googleAnalyticsId !!}
+        @else
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ $googleAnalyticsId }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '{{ $googleAnalyticsId }}');
+            </script>
+        @endif
+    @endif
 </head>
 <body class="font-sans antialiased bg-white text-gray-600">
 
