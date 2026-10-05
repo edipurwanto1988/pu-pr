@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Header Banner with Gradient and Pattern -->
-<div class="relative bg-gradient-to-br from-[#80311f] via-[#a33f28] to-[#ca4e33] py-20 lg:py-28 overflow-hidden">
+<div class="relative bg-gradient-to-br from-[#80311f] via-[#a33f28] to-[#ca4e33] py-16 lg:py-24 overflow-hidden">
     <!-- Decorative patterns -->
     <div class="absolute inset-0 opacity-10">
         <svg class="absolute left-0 top-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -16,30 +16,26 @@
             </pattern>
         </defs>
     </div>
-    <!-- Floating blobs -->
-    <div class="absolute -top-24 -left-24 w-96 h-96 bg-[#e3725b] rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-[#f09684] rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
     
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <span class="inline-block py-1 px-3 rounded-full bg-[#80311f]/50 border border-[#ca4e33]/30 text-orange-100 text-sm font-semibold tracking-wider mb-4 backdrop-blur-sm">STRUKTUR ORGANISASI</span>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-md">
+        <h1 class="text-3xl md:text-5xl lg:text-5xl font-extrabold text-white tracking-tight mb-4 drop-shadow-md">
             Dewan Pengurus Pusat
         </h1>
-        <p class="text-xl md:text-2xl text-orange-50 max-w-3xl mx-auto font-light">
+        <p class="text-lg md:text-xl text-orange-50 max-w-3xl mx-auto font-light">
             Pelaku Usaha Pekanbaru Riau (PUPR)
         </p>
     </div>
 </div>
 
-<div class="bg-gray-50/50 py-16 lg:py-24 relative z-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-12">
+<div class="bg-gray-50/50 py-12 lg:py-16 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
             @forelse($members as $index => $member)
-                <!-- Make the first 2 members (Dewan Pendiri & Ketua Pembina) span more if desired, or just keep grid -->
-                <div class="group relative bg-white/80 backdrop-blur-xl rounded-[2rem] p-8 shadow-xl shadow-[#ca4e33]/5 border border-white/60 hover:-translate-y-2 transition-all duration-500 overflow-hidden {{ $index < 2 ? 'sm:col-span-2 lg:col-span-1 ring-1 ring-[#ca4e33]/20' : '' }}">
+                <div class="group relative bg-white/80 backdrop-blur-xl rounded-2xl p-6 lg:p-8 shadow-lg shadow-[#ca4e33]/5 border border-gray-100 hover:-translate-y-1 transition-transform duration-300 overflow-hidden {{ $index < 2 ? 'ring-1 ring-[#ca4e33]/30' : '' }}">
                     <!-- Card decorative elements -->
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-[#fbece9] to-[#f4d1ca] rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#ca4e33] via-[#d6654c] to-[#e07b64] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#ca4e33] via-[#d6654c] to-[#e07b64] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
 
                     <div class="relative z-10 text-center flex flex-col h-full items-center">
                         <div class="relative w-36 h-36 mb-6">
