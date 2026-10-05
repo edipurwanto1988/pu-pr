@@ -63,12 +63,12 @@
                             </div>
                         </div>
 
-                        <h3 class="text-lg xl:text-xl font-bold text-gray-800 mb-2 group-hover:text-[#ca4e33] transition-colors duration-300 w-full truncate px-2" title="{{ $member->name }}">{{ $member->name }}</h3>
+                        <h3 class="text-lg xl:text-xl font-bold text-gray-800 mb-2 group-hover:text-[#ca4e33] transition-colors duration-300 w-full break-words whitespace-normal px-2" title="{{ $member->name }}">{{ $member->name }}</h3>
                         
                         <div class="mt-auto pt-4 w-full border-t border-gray-100">
-                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-sm font-semibold bg-[#ca4e33]/10 text-[#ca4e33] border border-[#ca4e33]/20 shadow-sm group-hover:bg-[#ca4e33] group-hover:text-white transition-colors duration-300 w-full truncate">
+                            <div class="block w-full px-4 py-2.5 rounded-xl text-sm font-medium bg-[#ca4e33]/10 text-[#ca4e33] border border-[#ca4e33]/20 shadow-sm group-hover:bg-[#ca4e33] group-hover:text-white transition-colors duration-300 text-center leading-relaxed break-words whitespace-normal">
                                 {{ $member->position }}
-                            </span>
+                            </div>
                         </div>
                     </div>
                 </div>
