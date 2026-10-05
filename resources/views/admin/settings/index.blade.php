@@ -94,34 +94,34 @@
                                         <input type="checkbox" id="bool_{{ $setting->name }}" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500" {{ $setting->value === 'true' ? 'checked' : '' }} onchange="document.getElementById('hidden_{{ $setting->name }}').value = this.checked ? 'true' : 'false'">
                                         <span class="ml-2 text-sm text-gray-600">Aktif</span>
                                     </label>
-                                    <input type="hidden" id="hidden_{{ $setting->name }}" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}">
-                                    <input type="hidden" name="settings[{{ $loop->index }}][name]" value="{{ $setting->name }}">
+                                    <input type="hidden" id="hidden_{{ $setting->name }}" name="settings[{{ $setting->name }}][value]" value="{{ $setting->value }}">
+                                    <input type="hidden" name="settings[{{ $setting->name }}][name]" value="{{ $setting->name }}">
                                 @elseif($setting->type === 'image')
                                     <div class="flex items-center gap-4">
                                         @if($setting->value)
                                             <img src="{{ asset($setting->value) }}" alt="{{ $setting->name }}" class="h-16 w-16 object-contain border rounded">
                                         @endif
                                         <input type="file" name="settings_image_{{ $setting->name }}" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                        <input type="hidden" name="settings[{{ $loop->index }}][name]" value="{{ $setting->name }}">
-                                        <input type="hidden" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}">
+                                        <input type="hidden" name="settings[{{ $setting->name }}][name]" value="{{ $setting->name }}">
+                                        <input type="hidden" name="settings[{{ $setting->name }}][value]" value="{{ $setting->value }}">
                                     </div>
                                 @else
                                     @if($setting->name === 'whatsapp_message')
-                                        <textarea name="settings[{{ $loop->index }}][value]" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ $setting->value }}</textarea>
+                                        <textarea name="settings[{{ $setting->name }}][value]" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ $setting->value }}</textarea>
                                     @else
                                         @if($setting->name === 'google_drive_refresh_token')
                                             <div class="flex gap-2">
-                                                <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50" readonly placeholder="Tombol Sambungkan dinonaktifkan sementara">
+                                                <input type="text" name="settings[{{ $setting->name }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50" readonly placeholder="Tombol Sambungkan dinonaktifkan sementara">
                                                 <button type="button" disabled class="mt-1 inline-flex items-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest cursor-not-allowed opacity-60 whitespace-nowrap" title="Tombol Sambungkan dinonaktifkan sementara">
                                                     <i class="ri-google-fill mr-2"></i> Sambungkan
                                                 </button>
                                             </div>
                                             <p class="mt-1 text-xs text-gray-500">Tombol Sambungkan Google Drive saat ini dinonaktifkan sementara.</p>
                                         @else
-                                            <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm {{ str_starts_with($setting->name, 'google_drive') ? 'bg-gray-50' : '' }}" {{ str_starts_with($setting->name, 'google_drive') ? 'readonly' : '' }}>
+                                            <input type="text" name="settings[{{ $setting->name }}][value]" value="{{ $setting->value }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm {{ str_starts_with($setting->name, 'google_drive') ? 'bg-gray-50' : '' }}" {{ str_starts_with($setting->name, 'google_drive') ? 'readonly' : '' }}>
                                         @endif
                                     @endif
-                                    <input type="hidden" name="settings[{{ $loop->index }}][name]" value="{{ $setting->name }}">
+                                    <input type="hidden" name="settings[{{ $setting->name }}][name]" value="{{ $setting->name }}">
                                 @endif
                             </div>
                         @endforeach
