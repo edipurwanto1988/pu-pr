@@ -31,6 +31,8 @@ Route::get('/berita/{news}', [HomeController::class, 'beritaDetail'])->name('ber
 
 Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
 
+Route::get('/dewan-pengurus', [\App\Http\Controllers\Frontend\BoardMemberController::class, 'index'])->name('dewan-pengurus');
+
 Route::get('/page/{page}', [HomeController::class, 'page'])->name('page');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');

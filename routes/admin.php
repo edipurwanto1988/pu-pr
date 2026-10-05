@@ -44,6 +44,8 @@ Route::middleware(['auth', 'role:super-admin|admin|umkm-ikm'])->prefix('admin')-
         Route::resource('/galleries', \App\Http\Controllers\Admin\GalleryController::class);
         Route::delete('/galleries/{gallery}/images/{image}', [\App\Http\Controllers\Admin\GalleryController::class, 'destroyImage'])->name('galleries.images.destroy');
         Route::post('/galleries/{gallery}/add-images', [\App\Http\Controllers\Admin\GalleryController::class, 'addImages'])->name('galleries.add-images');
+        Route::post('/board-members/reorder', [\App\Http\Controllers\Admin\BoardMemberController::class, 'reorder'])->name('board-members.reorder');
+        Route::resource('/board-members', \App\Http\Controllers\Admin\BoardMemberController::class);
         Route::resource('/users', UserController::class);
         Route::resource('/kecamatans', KecamatanController::class);
         Route::get('/kecamatans/{kecamatan}/kelurahans', [KecamatanController::class, 'kelurahans'])->name('kecamatans.kelurahans');

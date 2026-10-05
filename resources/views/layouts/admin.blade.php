@@ -97,6 +97,9 @@
                 <a href="{{ route('admin.pages.index') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.pages.*') ? 'bg-gray-100' : '' }}">
                     <i class="ri-file-text-line mr-2"></i> Halaman
                 </a>
+                <a href="{{ route('admin.board-members.index') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.board-members.*') ? 'bg-gray-100' : '' }}">
+                    <i class="ri-team-line mr-2"></i> Dewan Pengurus
+                </a>
                 <a href="{{ route('admin.settings.index') }}" class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.settings.*') ? 'bg-gray-100' : '' }}">
                     <i class="ri-settings-3-line mr-2"></i> Pengaturan
                 </a>
