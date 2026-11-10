@@ -166,6 +166,12 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar QRIS (Opsional, Maks 2MB)</label>
+                        <input type="file" name="qris_image" accept="image/*"
+                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                    </div>
+
                     @if(!auth()->user()->hasRole('umkm-ikm'))
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>

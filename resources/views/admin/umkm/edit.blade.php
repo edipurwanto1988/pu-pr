@@ -106,6 +106,17 @@
                             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     </div>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Gambar QRIS (Opsional, Maks 2MB)</label>
+                    @if($umkm->qris_image)
+                        <div class="mb-2">
+                            <img src="{{ \App\Services\GoogleDriveService::getUrl($umkm->qris_image) }}" alt="QRIS" class="h-40 w-40 object-contain rounded border bg-white p-1">
+                        </div>
+                    @endif
+                    <input type="file" name="qris_image" accept="image/*"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
             </div>
 
             <div class="mt-6 flex justify-end gap-3">

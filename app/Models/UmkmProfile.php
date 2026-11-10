@@ -28,6 +28,7 @@ class UmkmProfile extends Model
         'whatsapp',
         'logo',
         'banner',
+        'qris_image',
         'status',
         'validated_by',
         'validated_at',

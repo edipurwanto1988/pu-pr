@@ -230,6 +230,22 @@
                                         @endif
                                     </div>
 
+                                    {{-- QRIS Pembayaran (diunggah oleh penjual UMKM/UKM) --}}
+                                    <div class="space-y-3">
+                                        <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Pembayaran QRIS</p>
+                                        @if($product->umkmProfile->qris_image)
+                                            <button type="button" onclick="openQrisModal()" class="bg-white border border-gray-100 rounded-2xl p-4 flex justify-center shadow-sm w-full" style="cursor: zoom-in;" aria-label="Perbesar QRIS">
+                                                <img src="{{ \App\Services\GoogleDriveService::getUrl($product->umkmProfile->qris_image) }}" alt="QRIS {{ $product->umkmProfile->business_name }}" class="w-48 h-48 object-contain">
+                                            </button>
+                                            <p class="text-[11px] text-gray-400 text-center">Scan QRIS menggunakan aplikasi e-wallet atau m-banking Anda.</p>
+                                        @else
+                                            <div class="bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-2">
+                                                <i class="ri-qr-code-line text-4xl text-gray-300"></i>
+                                                <p class="text-xs text-gray-400">QRIS belum tersedia</p>
+                                            </div>
+                                        @endif
+                                    </div>
+
                                     <div class="pt-6 border-t border-gray-50 flex flex-col gap-2">
                                         <a href="{{ route('umkm.detail', $product->umkmProfile->slug) }}" class="flex items-center justify-center gap-2 w-full py-3 bg-gray-900 hover:bg-black text-white rounded-xl font-bold transition-all text-sm">
                                             Kunjungi Toko
@@ -334,7 +350,42 @@
     .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
 </style>
 
+@if($product->umkmProfile?->qris_image)
+{{-- Popup QRIS --}}
+<div id="qrisModal" onclick="if(event.target === this) closeQrisModal()" role="dialog" aria-modal="true" aria-labelledby="qrisModalTitle" style="display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, 0.7); align-items: center; justify-content: center; padding: 16px;">
+    <div style="position: relative; background: #fff; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,.35); width: 100%; max-width: 24rem; padding: 24px; text-align: center;">
+        <button type="button" onclick="closeQrisModal()" class="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100" aria-label="Tutup">
+            <i class="ri-close-line text-2xl"></i>
+        </button>
+        <h3 id="qrisModalTitle" class="font-bold text-gray-900 mb-1">Pembayaran QRIS</h3>
+        <p class="text-xs text-gray-500 mb-4">{{ $product->umkmProfile->business_name }}</p>
+        <div class="bg-white border border-gray-100 rounded-2xl p-3 flex justify-center">
+            <img src="{{ \App\Services\GoogleDriveService::getUrl($product->umkmProfile->qris_image) }}" alt="QRIS {{ $product->umkmProfile->business_name }}" class="w-full max-w-[320px] object-contain">
+        </div>
+        <p class="text-[11px] text-gray-400 mt-4">Scan QRIS menggunakan aplikasi e-wallet atau m-banking Anda.</p>
+    </div>
+</div>
+@endif
+
 <script>
+function openQrisModal() {
+    const modal = document.getElementById('qrisModal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeQrisModal() {
+    const modal = document.getElementById('qrisModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeQrisModal();
+});
+
 function switchImage(src, btn) {
     const mainImage = document.getElementById('mainImage');
     

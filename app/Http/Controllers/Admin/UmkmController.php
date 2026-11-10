@@ -94,6 +94,7 @@ class UmkmController extends Controller
             'phone' => 'nullable|string|max:20',
             'whatsapp' => 'nullable|string|max:20',
             'status' => 'required|in:pending,approved',
+            'qris_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($request->user_source === 'new') {
@@ -155,6 +156,15 @@ class UmkmController extends Controller
             }
         }
 
+        if ($request->hasFile('qris_image')) {
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('qris_image'), 'QRIS_');
+            if ($driveId) {
+                $umkmData['qris_image'] = 'gdrive:' . $driveId;
+            } else {
+                $umkmData['qris_image'] = $request->file('qris_image')->store('umkm', 'public');
+            }
+        }
+
         UmkmProfile::create($umkmData);
 
         return redirect()->route('admin.umkm.index')->with('success', 'UMKM/IKM berhasil dibuat');
@@ -162,18 +172,21 @@ class UmkmController extends Controller
 
     public function show(UmkmProfile $umkm)
     {
+        $this->authorizeOwnerOrStaff($umkm);
         $umkm->load('kecamatan', 'kelurahan');
         return view('admin.umkm.show', compact('umkm'));
     }
 
     public function edit(UmkmProfile $umkm)
     {
+        $this->authorizeOwnerOrStaff($umkm);
         $kecamatans = Kecamatan::with('kelurahans')->orderBy('name')->get();
         return view('admin.umkm.edit', compact('umkm', 'kecamatans'));
     }
 
     public function update(Request $request, UmkmProfile $umkm)
     {
+        $this->authorizeOwnerOrStaff($umkm);
         $request->validate([
             'business_name' => 'required|string|max:255',
             'business_type' => 'required|in:produk,jasa',
@@ -182,6 +195,7 @@ class UmkmController extends Controller
             'kelurahan_id' => 'nullable|exists:kelurahans,id',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'qris_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $data = $request->only(['business_name', 'business_type', 'type', 'description', 'address', 'kecamatan_id', 'kelurahan_id', 'postal_code', 'phone', 'whatsapp']);
@@ -206,6 +220,15 @@ class UmkmController extends Controller
             }
         }
 
+        if ($request->hasFile('qris_image')) {
+            $driveId = \App\Services\GoogleDriveService::upload($request->file('qris_image'), 'QRIS_');
+            if ($driveId) {
+                $data['qris_image'] = 'gdrive:' . $driveId;
+            } else {
+                $data['qris_image'] = $request->file('qris_image')->store('umkm', 'public');
+            }
+        }
+
         $umkm->update($data);
 
         return redirect()->route('admin.umkm.index')->with('success', 'Data berhasil diperbarui');
@@ -213,6 +236,7 @@ class UmkmController extends Controller
 
     public function destroy(UmkmProfile $umkm)
     {
+        $this->authorizeOwnerOrStaff($umkm);
         $umkm->user->delete();
         $umkm->delete();
         return redirect()->route('admin.umkm.index')->with('success', 'UMKM/IKM berhasil dihapus');
@@ -247,6 +271,17 @@ class UmkmController extends Controller
     {
         $kelurahans = \App\Models\Kelurahan::where('kecamatan_id', $kecamatanId)->orderBy('name')->get();
         return response()->json($kelurahans);
+    }
+
+    /**
+     * Penjual (umkm-ikm) hanya boleh mengakses profil miliknya sendiri.
+     * Role lain (super-admin, admin, validator) tidak dibatasi.
+     */
+    private function authorizeOwnerOrStaff(UmkmProfile $umkm): void
+    {
+        if (auth()->user()->hasRole('umkm-ikm')) {
+            abort_unless($umkm->user_id === auth()->id(), 403);
+        }
     }
 
     private function cleanTinyMce(?string $content): ?string
