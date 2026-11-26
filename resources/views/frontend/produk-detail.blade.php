@@ -112,6 +112,31 @@
                             </div>
                         @endif
 
+                        @php
+                            $shareUrl = route('produk.detail', $product->slug);
+                            $shareText = 'Lihat ' . $product->name . ' dari ' . ($product->umkmProfile?->business_name ?? 'PUPR') . ' di PUPR Pekanbaru';
+                        @endphp
+                        <div class="pt-6 border-t border-gray-100">
+                            <p class="text-xs text-gray-400 font-medium uppercase tracking-wider mb-3">Bagikan</p>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="https://wa.me/?text={{ urlencode($shareText . ' ' . $shareUrl) }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#1fb855] text-white text-sm font-semibold transition-colors">
+                                    <i class="ri-whatsapp-line text-lg"></i> WhatsApp
+                                </a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1877F2] hover:bg-[#0f63d4] text-white text-sm font-semibold transition-colors">
+                                    <i class="ri-facebook-circle-line text-lg"></i> Facebook
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?text={{ urlencode($shareText) }}&url={{ urlencode($shareUrl) }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black hover:bg-gray-800 text-white text-sm font-semibold transition-colors">
+                                    <i class="ri-twitter-x-line text-lg"></i> X
+                                </a>
+                                <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($shareText) }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#229ED9] hover:bg-[#1b8bc2] text-white text-sm font-semibold transition-colors">
+                                    <i class="ri-telegram-line text-lg"></i> Telegram
+                                </a>
+                                <button type="button" onclick="shareProduct()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold transition-colors">
+                                    <i class="ri-share-line text-lg"></i> Lainnya
+                                </button>
+                            </div>
+                        </div>
+
                         
                     </div>
 
@@ -416,8 +441,8 @@ function switchImage(src, btn) {
 function shareProduct() {
     if (navigator.share) {
         navigator.share({
-            title: '{{ $product->name }}',
-            text: 'Lihat produk {{ $product->name }} dari {{ $product->umkmProfile?->business_name }} di PUPR Pekanbaru',
+            title: {!! json_encode($product->name) !!},
+            text: {!! json_encode($shareText) !!},
             url: window.location.href,
         }).catch(console.error);
     } else {
