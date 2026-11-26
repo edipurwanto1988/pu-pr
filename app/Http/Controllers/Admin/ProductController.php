@@ -257,18 +257,18 @@ class ProductController extends Controller
         if ($file->getSize() > 800 * 1024) { // > 800 KB
             try {
                 $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
-                $img = $manager->read($file->path());
+                $img = $manager->decodePath($file->path());
                 
                 // Scale down if width is greater than 1200px
                 $img->scaleDown(width: 1200);
                 
                 $mime = $file->getMimeType();
                 if ($mime === 'image/png') {
-                    $encoded = $img->toPng();
+                    $encoded = $img->encodeUsingFormat(\Intervention\Image\Format::PNG);
                 } elseif ($mime === 'image/webp') {
-                    $encoded = $img->toWebp(75);
+                    $encoded = $img->encodeUsingFormat(\Intervention\Image\Format::WEBP, quality: 75);
                 } else {
-                    $encoded = $img->toJpeg(75);
+                    $encoded = $img->encodeUsingFormat(\Intervention\Image\Format::JPEG, quality: 75);
                 }
                 
                 file_put_contents($file->path(), $encoded->toString());
