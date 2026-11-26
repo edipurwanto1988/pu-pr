@@ -67,30 +67,30 @@
     </div>
 </form>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
+<div class="bg-white rounded-lg shadow overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Usaha</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pemilik</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kecamatan</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Usaha</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">Pemilik</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">Kecamatan</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">Tipe</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
             @forelse($umkm as $item)
                 <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 font-medium text-gray-800">{{ $item->business_name }}</td>
-                    <td class="px-6 py-4 text-gray-500">{{ $item->user?->name ?? '-' }}</td>
-                    <td class="px-6 py-4 text-gray-500">{{ $item->kecamatan?->name ?? '-' }}</td>
-                    <td class="px-6 py-4">
+                    <td class="px-4 sm:px-6 py-4 font-medium text-gray-800">{{ $item->business_name }}</td>
+                    <td class="px-4 sm:px-6 py-4 text-gray-500 hidden md:table-cell">{{ $item->user?->name ?? '-' }}</td>
+                    <td class="px-4 sm:px-6 py-4 text-gray-500 hidden md:table-cell">{{ $item->kecamatan?->name ?? '-' }}</td>
+                    <td class="px-4 sm:px-6 py-4 hidden sm:table-cell">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $item->type === 'umkm' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700' }}">
                             {{ strtoupper($item->type) }}
                         </span>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="px-4 sm:px-6 py-4">
                         @if($item->status === 'pending')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700">Pending</span>
                         @elseif($item->status === 'approved')
@@ -99,9 +99,9 @@
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">Rejected</span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-right whitespace-nowrap">
-                        <a href="{{ route('admin.umkm.show', $item) }}" class="text-blue-600 hover:text-blue-900 mr-3" title="Lihat"><i class="ri-eye-line"></i></a>
-                        <a href="{{ route('admin.umkm.edit', $item) }}" class="text-yellow-600 hover:text-yellow-900 mr-3" title="Edit"><i class="ri-edit-line"></i></a>
+                    <td class="px-4 sm:px-6 py-4 text-right whitespace-nowrap">
+                        <a href="{{ route('admin.umkm.show', $item) }}" class="inline-flex items-center justify-center p-1.5 text-blue-600 hover:text-blue-900 mr-1 sm:mr-3" title="Lihat"><i class="ri-eye-line text-lg"></i></a>
+                        <a href="{{ route('admin.umkm.edit', $item) }}" class="inline-flex items-center justify-center p-1.5 text-yellow-600 hover:text-yellow-900 mr-1 sm:mr-3" title="Edit"><i class="ri-edit-line text-lg"></i></a>
                         @if($item->status === 'pending' && auth()->user()->hasRole('super-admin'))
                             <form action="{{ route('admin.umkm.approve', $item) }}" method="POST" class="inline">
                                 @csrf
