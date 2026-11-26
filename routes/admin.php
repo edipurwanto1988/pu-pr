@@ -63,5 +63,6 @@ Route::middleware(['auth', 'role:super-admin|admin|umkm-ikm'])->prefix('admin')-
     Route::post('/products/{product}/featured', [\App\Http\Controllers\Admin\ProductController::class, 'featured'])->name('products.featured');
     Route::post('/products/{product}/approve', [\App\Http\Controllers\Admin\ProductController::class, 'approve'])->name('products.approve');
     Route::post('/products/{product}/reject', [\App\Http\Controllers\Admin\ProductController::class, 'reject'])->name('products.reject');
+    Route::post('/products/{product}/unapprove', [\App\Http\Controllers\Admin\ProductController::class, 'unapprove'])->name('products.unapprove');
     Route::delete('/products/{product}/images/{image}', [\App\Http\Controllers\Admin\ProductController::class, 'deleteImage'])->name('products.images.destroy');
 });

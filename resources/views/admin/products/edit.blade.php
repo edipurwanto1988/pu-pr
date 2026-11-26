@@ -7,6 +7,16 @@
         <h1 class="text-2xl font-semibold text-gray-800"><i class="ri-edit-line mr-2"></i>Edit Produk/Jasa</h1>
     </div>
 
+    @if($product->status === 'approved' && !auth()->user()->hasRole('umkm-ikm'))
+        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <span class="text-sm text-emerald-800"><i class="ri-check-double-line mr-1"></i>Produk ini sudah disetujui.</span>
+            <form action="{{ route('admin.products.unapprove', $product) }}" method="POST" onsubmit="return confirm('Batalkan persetujuan? Produk akan kembali pending dan tidak tampil di website.')">
+                @csrf
+                <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600"><i class="ri-arrow-go-back-line mr-1"></i>Ubah jadi Tidak Approve</button>
+            </form>
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
             <div class="font-semibold"><i class="ri-error-warning-line mr-1"></i> Terdapat kesalahan:</div>

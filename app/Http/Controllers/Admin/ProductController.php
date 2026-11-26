@@ -169,6 +169,17 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Produk/Jasa telah disetujui');
     }
 
+    public function unapprove(Product $product)
+    {
+        abort_if(auth()->user()->hasRole('umkm-ikm'), 403);
+        $product->update([
+            'status' => 'pending',
+            'validated_by' => null,
+            'validated_at' => null,
+        ]);
+        return redirect()->route('admin.products.edit', $product)->with('success', 'Persetujuan dibatalkan, produk kembali pending');
+    }
+
     public function reject(Request $request, Product $product)
     {
         abort_if(auth()->user()->hasRole('umkm-ikm'), 403);
