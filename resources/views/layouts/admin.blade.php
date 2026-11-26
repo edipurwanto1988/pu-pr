@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'PUPR') }} - Admin</title>
-    @php $favicon = \App\Models\Setting::where('name', 'favicon')->value('value'); @endphp
+    @php $favicon = \App\Models\Setting::cachedValue('favicon'); @endphp
     <link rel="icon" href="{{ $favicon ? asset($favicon) : asset('logo_pupr.webp') }}" type="image/webp">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

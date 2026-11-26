@@ -9,8 +9,8 @@
     <meta name="description" content="{{ strip_tags($__env->yieldContent('og_description') ?: 'Platform Promosi UMKM/IKM Kota Pekanbaru') }}">
     <meta name="keywords" content="PUPR, UMKM, IKM, Pekanbaru, Pekanbaru, produk lokal, jasa lokal, promosi usaha, pelaku usaha">
     @php 
-        $favicon = \App\Models\Setting::where('name', 'favicon')->value('value');
-        $contactPhone = \App\Models\Setting::where('name', 'whatsapp_number')->value('value') ?: '6282390439561';
+        $favicon = \App\Models\Setting::cachedValue('favicon');
+        $contactPhone = \App\Models\Setting::cachedValue('whatsapp_number') ?: '6282390439561';
     @endphp
     <link rel="icon" href="{{ $favicon ? asset($favicon) : asset('logo_pupr.webp') }}" type="image/webp">
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -36,8 +36,8 @@
     @yield('json_ld')
 
     @php
-        $googleSearchConsoleKey = \App\Models\Setting::where('name', 'google_search_console_key')->value('value');
-        $googleAnalyticsId = \App\Models\Setting::where('name', 'google_analytics_id')->value('value');
+        $googleSearchConsoleKey = \App\Models\Setting::cachedValue('google_search_console_key');
+        $googleAnalyticsId = \App\Models\Setting::cachedValue('google_analytics_id');
     @endphp
 
     @if($googleSearchConsoleKey)

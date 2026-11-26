@@ -125,6 +125,9 @@ return [
     |
     */
 
-    'serializable_classes' => false,
+    'serializable_classes' => [
+        \App\Models\Menu::class,
+        \Illuminate\Database\Eloquent\Collection::class,
+    ],
 
 ];

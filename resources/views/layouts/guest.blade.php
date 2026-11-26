@@ -13,7 +13,7 @@
 <body class="font-sans antialiased bg-white text-gray-600">
 
     @php 
-        $contactPhone = \App\Models\Setting::where('name', 'whatsapp_number')->value('value') ?: '6282390439561';
+        $contactPhone = \App\Models\Setting::cachedValue('whatsapp_number') ?: '6282390439561';
     @endphp
     {{-- Top Bar --}}
     <div class="bg-[#ca4e33] text-white/80 text-xs py-1.5 hidden md:block">
