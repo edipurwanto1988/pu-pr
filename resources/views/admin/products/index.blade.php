@@ -54,29 +54,29 @@
     </div>
 </form>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
+<div class="bg-white rounded-lg shadow overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">UMKM</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Featured</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">UMKM</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">Tipe</th>
+                <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-4 sm:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">Featured</th>
+                <th class="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
             @forelse($products as $product)
                 <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 font-medium text-gray-800">{{ $product->name }}</td>
-                    <td class="px-6 py-4 text-gray-500">{{ $product->umkmProfile?->business_name }}</td>
-                    <td class="px-6 py-4">
+                    <td class="px-4 sm:px-6 py-4 font-medium text-gray-800">{{ $product->name }}</td>
+                    <td class="px-4 sm:px-6 py-4 text-gray-500 hidden md:table-cell">{{ $product->umkmProfile?->business_name }}</td>
+                    <td class="px-4 sm:px-6 py-4 hidden sm:table-cell">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->type === 'produk' ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }}">
                             <i class="{{ $product->type === 'produk' ? 'ri-shopping-bag-line' : 'ri-service-line' }} mr-1"></i>{{ $product->type }}
                         </span>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="px-4 sm:px-6 py-4">
                         @if($product->status === 'pending')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700"><i class="ri-time-line mr-1"></i>Pending</span>
                         @elseif($product->status === 'approved')
@@ -85,21 +85,21 @@
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700"><i class="ri-close-line mr-1"></i>Rejected</span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-4 sm:px-6 py-4 text-center hidden sm:table-cell">
                         <form action="{{ route('admin.products.featured', $product) }}" method="POST">
                             @csrf
                             <input type="checkbox" name="is_featured" {{ $product->is_featured ? 'checked' : '' }} onchange="this.form.submit()" class="rounded text-yellow-500">
                         </form>
                     </td>
-                    <td class="px-6 py-4 text-right whitespace-nowrap">
-                        <a href="{{ route('admin.products.show', $product) }}" class="text-blue-600 hover:text-blue-900 mr-2" title="Lihat"><i class="ri-eye-line"></i></a>
-                        <a href="{{ route('admin.products.edit', $product) }}" class="text-yellow-600 hover:text-yellow-900 mr-2" title="Edit"><i class="ri-edit-line"></i></a>
+                    <td class="px-4 sm:px-6 py-4 text-right whitespace-nowrap">
+                        <a href="{{ route('admin.products.show', $product) }}" class="inline-flex items-center justify-center p-1.5 text-blue-600 hover:text-blue-900 mr-1 sm:mr-2" title="Lihat"><i class="ri-eye-line text-lg"></i></a>
+                        <a href="{{ route('admin.products.edit', $product) }}" class="inline-flex items-center justify-center p-1.5 text-yellow-600 hover:text-yellow-900 mr-1 sm:mr-2" title="Edit"><i class="ri-edit-line text-lg"></i></a>
                         @if($product->status === 'pending' && !auth()->user()->hasRole('umkm-ikm'))
                             <form action="{{ route('admin.products.approve', $product) }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="text-emerald-600 hover:text-emerald-900 mr-2" title="Setujui"><i class="ri-check-double-line"></i></button>
+                                <button type="submit" class="inline-flex items-center justify-center p-1.5 text-emerald-600 hover:text-emerald-900 mr-1 sm:mr-2" title="Setujui"><i class="ri-check-double-line text-lg"></i></button>
                             </form>
-                            <button type="button" onclick="document.getElementById('reject-{{ $product->id }}').classList.toggle('hidden')" class="text-red-600 hover:text-red-900" title="Tolak"><i class="ri-close-circle-line"></i></button>
+                            <button type="button" onclick="document.getElementById('reject-{{ $product->id }}').classList.toggle('hidden')" class="inline-flex items-center justify-center p-1.5 text-red-600 hover:text-red-900" title="Tolak"><i class="ri-close-circle-line text-lg"></i></button>
                             <div id="reject-{{ $product->id }}" class="hidden absolute bg-white border shadow-lg rounded-lg p-4 mt-2 right-20 z-10 w-64">
                                 <form action="{{ route('admin.products.reject', $product) }}" method="POST">
                                     @csrf
