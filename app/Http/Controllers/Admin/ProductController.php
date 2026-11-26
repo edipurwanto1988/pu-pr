@@ -71,7 +71,7 @@ class ProductController extends Controller
         ]);
 
         $data = $request->except('image', 'images');
-        $data['slug'] = \Str::slug($request->name);
+        $data['slug'] = $this->uniqueSlug($request->name);
         $data['status'] = 'pending';
         $data['type'] = $request->input('type', 'produk');
 
@@ -124,7 +124,7 @@ class ProductController extends Controller
         ]);
 
         $data = $request->except('image', 'images');
-        $data['slug'] = \Str::slug($request->name);
+        $data['slug'] = $this->uniqueSlug($request->name, $product->id);
         $data['type'] = $request->input('type', $product->type ?? 'produk');
 
         $product->update($data);
@@ -250,6 +250,19 @@ class ProductController extends Controller
         }
 
         return false;
+    }
+
+    private function uniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $base = \Str::slug($name);
+        $slug = $base;
+        $suffix = 2;
+
+        while (Product::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = $base.'-'.$suffix++;
+        }
+
+        return $slug;
     }
 
     private function compressImageIfNeeded($file)
