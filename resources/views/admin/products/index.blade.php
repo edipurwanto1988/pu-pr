@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-semibold text-gray-800"><i class="ri-product-hunt-line mr-2"></i>Produk & Jasa</h1>
-    <a href="{{ route('admin.products.create') }}" class="px-4 py-2 bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b]">
+<div class="mb-6 flex justify-between items-center gap-3">
+    <h1 class="text-xl sm:text-2xl font-semibold text-gray-800"><i class="ri-product-hunt-line mr-2"></i>Produk & Jasa</h1>
+    <a href="{{ route('admin.products.create') }}" class="shrink-0 px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b]">
         <i class="ri-add-line mr-1"></i> Tambah
     </a>
 </div>

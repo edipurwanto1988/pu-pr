@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
-    <h1 class="text-2xl font-semibold text-gray-800"><i class="ri-store-line mr-2"></i>UMKM/IKM</h1>
+<div class="mb-6 flex justify-between items-center gap-3">
+    <h1 class="text-xl sm:text-2xl font-semibold text-gray-800"><i class="ri-store-line mr-2"></i>UMKM/IKM</h1>
     @php $canCreate = true; @endphp
     @if(auth()->user()->hasRole('umkm-ikm'))
         @php $umkmCount = \App\Models\UmkmProfile::where('user_id', auth()->id())->count(); @endphp
@@ -11,7 +11,7 @@
         @endif
     @endif
     @if($canCreate)
-    <a href="{{ route('admin.umkm.create') }}" class="px-4 py-2 bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b]">
+    <a href="{{ route('admin.umkm.create') }}" class="shrink-0 px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base bg-[#ca4e33] text-white rounded-lg hover:bg-[#b8432b]">
         <i class="ri-add-line mr-1"></i> Tambah UMKM/IKM
     </a>
     @endif
