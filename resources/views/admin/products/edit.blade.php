@@ -70,7 +70,7 @@
                             @foreach($product->images as $img)
                                 <div class="relative group" data-id="{{ $img->id }}">
                                     <img src="{{ $img->image_url }}" alt="" class="w-24 h-24 object-cover rounded-lg border">
-                                    <button type="button" onclick="deleteImage(this, {{ $img->id }})" class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 opacity-0 group-hover:opacity-100 transition"><i class="ri-close-line text-xs"></i></button>
+                                    <button type="button" onclick="deleteImage(this, {{ $img->id }})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100 transition"><i class="ri-close-line text-xs"></i></button>
                                     @if($loop->first)<span class="absolute bottom-1 left-1 bg-[#ca4e33] text-white text-[10px] px-1.5 py-0.5 rounded">Utama</span>@endif
                                 </div>
                             @endforeach
@@ -178,7 +178,7 @@ document.addEventListener('keydown', function(e) {
 <script>
 function deleteImage(btn, imageId) {
     if (!confirm('Hapus gambar ini?')) return;
-    fetch('{{ route("admin.products.images.destroy", [$product->id, "__IMGID__"]) }}'.replace('__IMGID__', imageId), {
+    fetch('{{ route("admin.products.images.destroy", [$product->slug, "__IMGID__"]) }}'.replace('__IMGID__', imageId), {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -200,6 +200,8 @@ function deleteImage(btn, imageId) {
                     }
                 }
             }
+        } else {
+            alert('Gagal menghapus gambar.');
         }
     });
 }
