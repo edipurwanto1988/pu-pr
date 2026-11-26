@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use App\Models\Menu;
 
@@ -21,10 +22,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::share('frontendMenus', Menu::where('status', 'active')
-            ->whereNull('parent_id')
-            ->with('children')
-            ->orderBy('order')
-            ->get());
+        // Menu frontend di-cache ke file (bukan database) supaya tidak menambah koneksi MySQL per request.
+        View::composer('layouts.frontend', function ($view) {
+            $view->with('frontendMenus', Cache::store('file')->rememberForever('frontend_menus', fn () => Menu::where('status', 'active')
+                ->whereNull('parent_id')
+                ->with('children')
+                ->orderBy('order')
+                ->get()));
+        });
     }
 }
