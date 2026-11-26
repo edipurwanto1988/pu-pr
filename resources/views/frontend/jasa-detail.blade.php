@@ -171,7 +171,7 @@
                                 @if($product->umkmProfile)
                                     <div class="flex items-center gap-4">
                                         @if($product->umkmProfile->logo)
-                                            <img src="{{ asset('storage/' . $product->umkmProfile->logo) }}" alt="{{ $product->umkmProfile->business_name }}" class="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-sm">
+                                            <img src="{{ \App\Services\GoogleDriveService::getUrl($product->umkmProfile->logo) }}" alt="{{ $product->umkmProfile->business_name }}" class="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-sm">
                                         @else
                                             <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-blue-600 border-2 border-gray-100 shadow-sm">
                                                 <i class="ri-user-settings-line text-2xl"></i>
